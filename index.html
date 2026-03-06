@@ -48,7 +48,6 @@
         td.text-left { text-align: left; }
         .row-others { background-color: #f1f5f9; color: #64748b; } 
         
-        /* ★ 新增：表格可編輯狀態的視覺提示 */
         td[contenteditable="true"] { transition: background-color 0.2s; outline: none; }
         td[contenteditable="true"]:hover { background-color: #f1f5f9; cursor: text; }
         td[contenteditable="true"]:focus { background-color: #e0f2fe; outline: 2px solid #38bdf8; box-shadow: inset 0 0 5px rgba(0,0,0,0.1); }
@@ -69,17 +68,35 @@
         .block-copy-btn { width: 100%; margin-top: 20px; font-size: 16px; padding: 12px; background-color: #334155; }
         .block-copy-btn:hover { background-color: #0f172a; }
 
-        /* 檢核表單專用 - 極簡短頁面樣式 */
-        .inspect-compact-container { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; }
-        .inspect-compact-row { border-bottom: 1px solid #e2e8f0; padding: 10px 5px; transition: 0.2s; }
-        .inspect-compact-row:last-child { border-bottom: none; }
-        .inspect-compact-row:hover { background-color: #f8fafc; }
-        .inspect-compact-header { display: flex; justify-content: space-between; align-items: center; }
-        .inspect-compact-title { font-size: 14px; font-weight: bold; color: #1e293b; flex: 1; }
-        .inspect-compact-inputs { display: flex; align-items: center; gap: 8px; }
-        .inspect-compact-inputs input { width: 60px; padding: 4px; text-align: center; font-weight: bold; color: #0284c7; margin: 0; }
+        /* =======================================
+           ★ 全新：檢核表單專用 - 三欄式卡片網格樣式 
+           ======================================= */
+        .inspect-compact-container { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 強制切成三欄 */
+            gap: 15px; /* 卡片之間的間距 */
+        }
         
-        .insp-block { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; margin-bottom: 10px; position: relative; }
+        /* 獨立的卡片外觀 */
+        .inspect-compact-row { 
+            background: #fff; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            padding: 15px; 
+            transition: 0.2s; 
+            align-self: start; /* 關鍵：展開時不會把旁邊的卡片跟著拉長 */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .inspect-compact-row:hover { border-color: #94a3b8; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        /* 卡片內部排版改為上下對齊，適應變窄的寬度 */
+        .inspect-compact-header { display: flex; flex-direction: column; gap: 10px; }
+        .inspect-compact-title { font-size: 14px; font-weight: bold; color: #1e293b; line-height: 1.4; }
+        .inspect-compact-inputs { display: flex; align-items: center; justify-content: space-between; width: 100%; border-top: 1px dashed #e2e8f0; padding-top: 10px; }
+        .inspect-compact-inputs-left { display: flex; align-items: center; gap: 8px; }
+        .inspect-compact-inputs input { width: 60px; padding: 4px; text-align: center; font-weight: bold; color: #0284c7; margin: 0; border: 1px solid #cbd5e1; border-radius: 4px;}
+        
+        .insp-block { background-color: #fff; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; margin-bottom: 10px; position: relative; }
         .insp-block-delete { position: absolute; right: 10px; top: 10px; background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .insp-block-delete:hover { background: #dc2626; }
         
@@ -157,7 +174,6 @@
             <div id="monthlyOutputArea" style="display: none; margin-top: 40px;">
                 <div class="export-block" id="blockPageExport">
                     <h3 class="export-block-title">📊 網頁流量分析</h3>
-                    <p class="hint-text" style="margin-top:-10px;">💡 提示：產出的表格可直接點擊格子修改內容。</p>
                     <div id="monthlyPageDraft" class="report-draft" contenteditable="true"></div>
                     <div>
                         <button class="action-btn btn-ai" onclick="copyDivContent('monthlyPageDraft')">📋 僅複製 AI 提示詞</button>
@@ -171,7 +187,6 @@
 
                 <div class="export-block" id="blockSearchExport">
                     <h3 class="export-block-title">🔍 站內搜尋分析</h3>
-                    <p class="hint-text" style="margin-top:-10px;">💡 提示：產出的表格可直接點擊格子修改內容。</p>
                     <div id="monthlySearchDraft" class="report-draft" contenteditable="true"></div>
                     <div>
                         <button class="action-btn btn-ai" onclick="copyDivContent('monthlySearchDraft')">📋 僅複製 AI 提示詞</button>
@@ -192,7 +207,6 @@
             <div class="section"><div class="section-title">上傳 GA 資料與設定</div><label>排除網頁標題關鍵字：</label><input type="text" id="gaExcludeKeywords" value="首頁, 網站導覽, 找不到網頁, Page Not Found"><input type="file" id="gaFileUpload" accept=".csv, .xlsx" /><span id="gaUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
             <div class="section"><div class="section-title">選擇你要產生的報表</div><button class="action-btn btn-primary" onclick="generateTop30()">產生 Top 30 報表</button><hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;"><label>本週發布新聞比對 (一行一個)：</label><textarea id="gaNewsList"></textarea><button class="action-btn btn-secondary" onclick="generateWeeklyMatch()">產生新聞比對報表</button></div>
             <div class="export-block" id="blockGAExport" style="display:none; margin-top:20px;">
-                <p class="hint-text">💡 提示：產出的表格可直接點擊格子修改內容。</p>
                 <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
                 <div id="gaResultArea"></div>
                 <button class="action-btn block-copy-btn" onclick="copyBlock('blockGAExport')">📦 打包複製：截圖 ＋ 表格</button>
@@ -203,8 +217,7 @@
     <div id="SearchTool" class="tabcontent">
         <div class="tool-container">
             <h2 style="margin-top:0;">🔍 站內搜尋獨立分類器</h2>
-            <p class="hint-text">由上到下掃描，配對成功即停止。越容易被搜的重點字，請排越上面。</p>
-            <div class="section"><div class="section-title">備用分類規則 (分類名稱 : 關鍵字1, 關鍵字2)</div><textarea id="searchRules" style="height:150px;">
+            <div class="section"><div class="section-title">備用分類規則</div><textarea id="searchRules" style="height:150px;">
 一般廢棄物/回收 : 廚餘, 回收, 垃圾, 寶特瓶, 廢棄物
 空污與機車定檢 : 空氣, 酸雨, 臭, 機車, 排氣
 碳政策與國際趨勢 : 碳費, 減碳, 碳盤查, CBAM, 淨零
@@ -214,7 +227,6 @@
 化學物質與有害品 : PFAS, 蘇丹紅, 毒性, 石綿</textarea></div>
             <div class="section"><div class="section-title">上傳搜尋字詞資料</div><input type="file" id="searchFileUpload" accept=".csv, .xlsx" /><span id="searchUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
             <div class="export-block" id="blockSearchIndExport" style="display:none; margin-top:20px;">
-                <p class="hint-text">💡 提示：產出的表格可直接點擊格子修改內容。</p>
                 <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
                 <div id="searchResultArea"></div>
                 <button class="action-btn block-copy-btn" onclick="copyBlock('blockSearchIndExport')">📦 打包複製：截圖 ＋ 表格</button>
@@ -226,12 +238,11 @@
         <div class="tool-container">
             <h2 style="margin-top:0;">⚡ 全站效能檢測 (總表與全附件生成)</h2>
             <div class="section"><div class="section-title">步驟一：設定檢測時間</div><label>檢測時間 (將寫入草稿)：</label><input type="text" id="speedDateText" value="115年1月6日"></div>
-            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><p class="hint-text">請上傳效能檢測的原始 Excel 檔。系統會自動將沒有名字的「電腦版」向上對齊配對。</p><input type="file" id="speedFileUpload" accept=".csv, .xlsx" /><span id="speedUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
+            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><input type="file" id="speedFileUpload" accept=".csv, .xlsx" /><span id="speedUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
 
             <div id="speedOutputArea" style="display: none; margin-top: 30px;">
                 <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 40px; border: 2px solid #cbd5e1;">
                     <h2 style="margin-top:0; color:#334155;">📊 效能檢測總表分析</h2>
-                    <p class="hint-text">💡 提示：產出的表格可直接點擊格子修改內容。</p>
                     <div class="export-block" id="blockSpeedDeskExport">
                         <h3 class="export-block-title">🖥️ 電腦版檢測總結</h3>
                         <div id="speedDesktopDraft" class="report-draft" contenteditable="true"></div>
@@ -257,7 +268,7 @@
         <div class="tool-container">
             <h2 style="margin-top:0;">🔗 全站無效連結檢測與附件生成</h2>
             <div class="section"><div class="section-title">步驟一：設定檢測時間</div><label>檢測時間 (將寫入草稿)：</label><input type="text" id="linkDateText" value="115年1月20日至115年1月23日"></div>
-            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><p class="hint-text">請上傳包含「網站」、「無效連結」、「來源網頁」、「文字」的 Excel 檔。系統將產出制式通報文字與各站專屬的附件報表。</p><input type="file" id="linkFileUpload" accept=".csv, .xlsx" /><span id="linkUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
+            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><input type="file" id="linkFileUpload" accept=".csv, .xlsx" /><span id="linkUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
 
             <div id="linkOutputArea" style="display: none; margin-top: 30px;">
                 <div class="export-block" id="blockLinkSummary">
@@ -266,20 +277,19 @@
                     <button class="action-btn block-copy-btn" onclick="copyTextArea('linkResultArea')">📋 複製所有通報文字</button>
                 </div>
                 <h2 style="color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 10px;">📎 各網站獨立附件區塊 (包含 0 錯誤網站)</h2>
-                <p class="hint-text">💡 提示：產出的表格可直接點擊格子輸入備註或修改內容。</p>
                 <div id="linkAttachmentsArea"></div>
             </div>
         </div>
     </div>
 
     <div id="InspectTool" class="tabcontent">
-        <div class="tool-container">
+        <div class="tool-container" style="max-width: 100%; width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin:0;">✅ 網站檢核 (短頁面智能表單)</h2>
+                <h2 style="margin:0;">✅ 網站檢核 (三欄智能網格表單)</h2>
                 <button class="action-btn btn-clear" onclick="resetInspectForm()">🗑️ 重置表單</button>
             </div>
             <p class="hint-text" style="color: #0284c7; font-weight: bold;">
-                💡 秘訣：點擊「➕ 新增一組圖文」可無限擴充錯誤說明與截圖區。
+                💡 秘訣：點擊「➕ 新增一組圖文」可無限擴充錯誤說明與截圖區。產出時系統會自動幫您標上 1. 2. 3. 的編號！
             </p>
             
             <div class="section" style="display: flex; gap: 15px; flex-wrap: wrap;">
@@ -297,17 +307,16 @@
                 </div>
             </div>
 
-            <div class="section" style="padding: 15px;">
-                <div class="section-title">📝 檢核項目評分區 (扣分將自動展開填寫區)</div>
+            <div class="section" style="padding: 20px; background: transparent; border: none;">
+                <div class="section-title" style="border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">📝 檢核項目評分區 (由左至右、由上至下)</div>
                 <div id="inspectFormArea" class="inspect-compact-container"></div>
             </div>
 
-            <button class="action-btn btn-primary btn-full" onclick="generateInspectReport()">✨ 產出 Word 格式檢核報告</button>
+            <button class="action-btn btn-primary btn-full" onclick="generateInspectReport()" style="font-size: 18px; padding: 15px;">✨ 產出 Word 格式檢核報告</button>
 
             <div id="inspectOutputArea" style="display: none; margin-top: 40px;">
                 <div class="export-block" id="blockInspectExport">
                     <h3 class="export-block-title">📄 網站檢核評分表 (附件)</h3>
-                    <p class="hint-text" style="margin-top:-10px;">💡 提示：所有表格與文字區塊皆可點擊修改。</p>
                     <div style="font-family: '微軟正黑體', sans-serif; font-size: 15px; line-height: 1.8; margin-bottom: 20px; color: #333;" contenteditable="true">
                         <span style="font-weight: bold; font-size: 18px;">網站檢核評分表 附件4</span><br>
                         <b>網站名稱：</b> <span id="outInspSite"></span><br>
@@ -353,13 +362,10 @@
     }
     function copyTable(tableId) { let table = document.getElementById(tableId); if (!table) return; let range = document.createRange(); range.selectNode(table); window.getSelection().removeAllRanges(); window.getSelection().addRange(range); try { document.execCommand('copy'); alert('✅ 表格已成功複製！'); } catch (err) {} window.getSelection().removeAllRanges(); }
     function copyTextArea(textAreaId) { let textArea = document.getElementById(textAreaId); textArea.select(); textArea.setSelectionRange(0, 99999); try { document.execCommand('copy'); alert('✅ 文字已成功複製！'); } catch (err) {} }
-    function copyDivContent(divId) { let div = document.getElementById(divId); let textToCopy = div.innerText; let temp = document.createElement("textarea"); temp.value = textToCopy; document.body.appendChild(temp); temp.select(); try { document.execCommand('copy'); alert('✅ 提示詞/草稿已成功複製！'); } catch (err) {} document.body.removeChild(temp); }
+    function copyDivContent(divId) { let div = document.getElementById(divId); let textToCopy = div.innerText; let tempTextarea = document.createElement("textarea"); tempTextarea.value = textToCopy; document.body.appendChild(tempTextarea); tempTextarea.select(); try { document.execCommand('copy'); alert('✅ 提示詞/草稿已成功複製！'); } catch (err) {} document.body.removeChild(tempTextarea); }
     function parseSafeNumber(val) { if (typeof val === 'number') return val; if (!val) return 0; let cleanVal = String(val).replace(/,/g, ''); let parsed = parseFloat(cleanVal); return isNaN(parsed) ? 0 : parsed; }
     
-    // ★ 核心工具：將產出的 HTML 表格轉換為可編輯狀態
-    function makeTableEditable(htmlString) {
-        return htmlString.replace(/<td/g, '<td contenteditable="true"');
-    }
+    function makeTableEditable(htmlString) { return htmlString.replace(/<td/g, '<td contenteditable="true"'); }
 
     /* ---------------- 網站清單管理 ---------------- */
     const defaultSites = ["化學署全球資訊網中文版", "化學署全球資訊網英文版", "環境用藥安全使用宣導網", "化學知識地圖", "持久性有機污染物(POPs)資訊網站", "汞水俣公約資訊網站", "環境荷爾蒙資訊網站", "化學物質環境流布調查資訊網站", "石綿資訊專區", "綠色化學應用及創新獎", "綠色化學整合專區", "國家化學物質管理會報", "鹿特丹公約資訊網站", "非農地環境雜草管理", "大專校院綠色化學創意競賽", "石綿資訊專區(英文版)", "環境事故專業技術小組", "全氟及多氟烷基物質(PFAS)管理行動計畫"];
@@ -385,7 +391,7 @@
     window.onload = function() { initGlobalSites(); buildInspectForm(); };
 
     /* =========================================
-       模組 A：單站月報生成 (套用可編輯表格)
+       模組 A：單站月報生成
        ========================================= */
     let monthPageData = []; let monthPageTotals = { views: 0, users: 0, avgTime: 0 };
     let monthSearchData = []; let monthSearchTotals = { searches: 0, users: 0 };
@@ -461,7 +467,7 @@
     }
 
     /* =========================================
-       模組 B/C：週報與搜尋分類 (套用可編輯表格)
+       模組 B/C：週報與搜尋分類 
        ========================================= */
     let globalGAData = []; let globalTotalViews = 0;
     document.getElementById('gaFileUpload').addEventListener('change', function(e) {
@@ -488,7 +494,7 @@
     });
 
     /* =========================================
-       模組 D：效能檢測 (套用可編輯表格)
+       模組 D：效能檢測 (★ 精準抓取 undefined 修正)
        ========================================= */
     let speedDesktopData = []; let speedMobileData = [];
     document.getElementById('speedFileUpload').addEventListener('change', function(e) {
@@ -497,9 +503,22 @@
             let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
             speedDesktopData = []; speedMobileData = []; let currentSite = ""; 
             jsonData.forEach(row => {
-                let rawSite = row["網站"] || row["網站名稱"] || row["編號"]; let site = rawSite ? String(rawSite).trim() : ""; if (site !== "" && site.toLowerCase() !== "undefined") { currentSite = site; }
-                let device = String(row["設備"] || row["裝置"] || "").trim(); let perf = parseSafeNumber(row["效能 Score"] || row["效能"]); let a11y = parseSafeNumber(row["無障礙功能 Score"] || row["無障礙功能"] || row["無障礙"]); let bp = parseSafeNumber(row["最佳做法 Score"] || row["最佳做法"]); let seo = parseSafeNumber(row["SEO Score"] || row["SEO"] || row["搜尋引擎最佳化（SEO）"]);
-                if (device !== "" && currentSite !== "") { let item = { site: currentSite, perf: perf, a11y: a11y, bp: bp, seo: seo }; if (device.includes("電腦") || device.toLowerCase().includes("desktop")) speedDesktopData.push(item); else if (device.includes("行動") || device.includes("手機") || device.toLowerCase().includes("mobile")) speedMobileData.push(item); }
+                // 強制過濾 undefined 與空白
+                let rawSite = row["網站"] || row["網站名稱"] || row["編號"];
+                let site = rawSite ? String(rawSite).trim() : "";
+                if (site !== "" && site.toLowerCase() !== "undefined") { currentSite = site; }
+                
+                let device = String(row["設備"] || row["裝置"] || "").trim(); 
+                let perf = parseSafeNumber(row["效能 Score"] || row["效能"]); 
+                let a11y = parseSafeNumber(row["無障礙功能 Score"] || row["無障礙功能"] || row["無障礙"]); 
+                let bp = parseSafeNumber(row["最佳做法 Score"] || row["最佳做法"]); 
+                let seo = parseSafeNumber(row["SEO Score"] || row["SEO"] || row["搜尋引擎最佳化（SEO）"]);
+                
+                if (device !== "" && currentSite !== "") { 
+                    let item = { site: currentSite, perf: perf, a11y: a11y, bp: bp, seo: seo }; 
+                    if (device.includes("電腦") || device.toLowerCase().includes("desktop")) speedDesktopData.push(item); 
+                    else if (device.includes("行動") || device.includes("手機") || device.toLowerCase().includes("mobile")) speedMobileData.push(item); 
+                }
             });
             document.getElementById('speedUploadStatus').style.color = "#10b981"; document.getElementById('speedUploadStatus').innerText = `✅ 完成！電腦版 ${speedDesktopData.length} 筆，行動版 ${speedMobileData.length} 筆。`; e.target.value = '';
             
@@ -537,7 +556,7 @@
     });
 
     /* =========================================
-       模組 F：無效連結 (套用可編輯表格)
+       模組 F：無效連結 
        ========================================= */
     document.getElementById('linkFileUpload').addEventListener('change', function(e) {
         if (e.target.files.length === 0) return; document.getElementById('linkUploadStatus').style.color = "#FF9800"; document.getElementById('linkUploadStatus').innerText = "解析中...";
@@ -573,7 +592,7 @@
     });
 
     /* =========================================
-       模組 G：網站檢核表單
+       模組 G：網站檢核表單 (★ 三欄網格排版)
        ========================================= */
     const inspectItems = [
         { id: 1, name: "基本要件", max: 12, isBonus: false }, { id: 2, name: "導覽功能", max: 3, isBonus: false },
@@ -598,17 +617,19 @@
                 <div class="inspect-compact-header">
                     <div class="inspect-compact-title">
                         ${item.id}. ${item.name} 
-                        <span style="font-weight:normal; color:#64748b; font-size:12px;">(${item.isBonus ? '加分項, 最高' : '配分'} ${item.max} 分)</span>
+                        <span style="font-weight:normal; color:#64748b; font-size:12px;">(${item.isBonus ? '加分, 最高' : '配分'} ${item.max} 分)</span>
                     </div>
                     <div class="inspect-compact-inputs">
-                        <label style="font-size:13px; font-weight:normal;">得分:</label>
-                        <input type="number" id="insp-score-${item.id}" value="${defaultScore}" max="${item.max}" min="0" oninput="checkInspectScore(${item.id}, ${item.max}, ${item.isBonus})">
+                        <div class="inspect-compact-inputs-left">
+                            <label style="font-size:13px; font-weight:normal; margin:0;">得分:</label>
+                            <input type="number" id="insp-score-${item.id}" value="${defaultScore}" max="${item.max}" min="0" oninput="checkInspectScore(${item.id}, ${item.max}, ${item.isBonus})">
+                        </div>
                         <button class="action-btn btn-blue" style="padding: 4px 8px; font-size: 12px; margin:0;" onclick="toggleInspectDetail(${item.id})">圖文區</button>
                     </div>
                 </div>
                 <div id="insp-detail-${item.id}" style="display: none; margin-top: 10px; background-color: #f1f5f9; padding: 15px; border-radius: 6px; border: 1px dashed #94a3b8;">
                     <div id="insp-blocks-${item.id}"></div>
-                    <button class="action-btn btn-secondary" style="padding: 5px 12px; font-size: 12px; margin-top: 5px;" onclick="addInspectBlock(${item.id}, ${item.isBonus})">➕ 新增一組圖文</button>
+                    <button class="action-btn btn-secondary" style="padding: 5px 12px; font-size: 12px; margin-top: 5px; width: 100%;" onclick="addInspectBlock(${item.id}, ${item.isBonus})">➕ 新增一組圖文</button>
                 </div>
             </div>`;
         });
@@ -620,10 +641,10 @@
         let container = document.getElementById(`insp-blocks-${id}`); let blockCount = container.children.length + 1;
         let blockHtml = `
         <div class="insp-block">
-            <button class="insp-block-delete" onclick="this.parentElement.remove()" title="刪除此組圖文">✖ 刪除</button>
+            <button class="insp-block-delete" onclick="this.parentElement.remove()" title="刪除此組圖文">✖</button>
             <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #475569;">📍 錯誤/說明項目 ${blockCount}</div>
             <textarea class="insp-desc" placeholder="${isBonus ? '請輸入加分內容說明...' : '請輸入不符合項目說明...'}" style="height: 60px;"></textarea>
-            <div class="paste-zone insp-img" contenteditable="true" data-placeholder="🧲 點擊此處按 Ctrl+V 貼上畫面截圖..." style="min-height: 40px; padding: 10px; margin-top: 8px; background:white;"></div>
+            <div class="paste-zone insp-img" contenteditable="true" data-placeholder="🧲 點此按 Ctrl+V 貼上截圖..." style="min-height: 40px; padding: 10px; margin-top: 8px; background:white;"></div>
         </div>`;
         container.insertAdjacentHTML('beforeend', blockHtml);
     }
@@ -682,7 +703,7 @@
     }
 
     /* =========================================
-       模組 E：文字雲
+       模組 E：文字雲 (★ 高密度橢圓版)
        ========================================= */
     const dark2_colors = ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#a6761d', '#666666'];
     document.getElementById('wcFileUpload').addEventListener('change', function(e) {
@@ -693,12 +714,14 @@
             if (validRows.length > 0 && isNaN(parseSafeNumber(validRows[0][1]))) validRows.shift(); 
             let wordFreqList = validRows.map(r => [String(r[0]).trim(), parseSafeNumber(r[1])]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 400); 
             document.getElementById('wcCanvasContainer').style.display = 'block'; 
+            
             WordCloud(document.getElementById('wordCloudCanvas'), { 
                 list: wordFreqList, fontFamily: '"微軟正黑體", "Microsoft JhengHei", sans-serif', 
                 weightFactor: function (size) { return Math.max(14, (size / wordFreqList[0][1]) * 180); }, 
                 color: function () { return dark2_colors[Math.floor(Math.random() * dark2_colors.length)]; }, 
                 shape: 'ellipse', ellipticity: 0.5, gridSize: 4, rotateRatio: 0, shrinkToFit: true, backgroundColor: 'transparent'
             }); 
+            
             document.getElementById('wcStatusMsg').style.color = "#10b981"; document.getElementById('wcStatusMsg').innerText = "🎉 製作完成！"; document.getElementById('wcDownloadBtn').style.display = 'block'; e.target.value = ''; 
         }; reader.readAsArrayBuffer(e.target.files[0]);
     });

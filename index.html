@@ -16,32 +16,17 @@
         .tab-buttons button { background-color: transparent; border: none; color: #cbd5e1; padding: 10px 12px; cursor: pointer; font-size: 14px; font-weight: bold; border-radius: 5px; transition: 0.2s; }
         .tab-buttons button:hover { background-color: #334155; color: white; }
         .tab-buttons button.active { background-color: #4CAF50; color: white; }
-        .btn-reset-all { background-color: #ef4444 !important; color: white !important; border: 1px solid #dc2626 !important; margin-left: 10px; }
+        
+        .btn-setting { background-color: #475569 !important; color: white !important; margin-left: 15px; border: 1px solid #334155 !important; }
+        .btn-setting:hover { background-color: #334155 !important; }
+        .btn-reset-all { background-color: #ef4444 !important; color: white !important; border: 1px solid #dc2626 !important; margin-left: 5px; }
         .btn-reset-all:hover { background-color: #b91c1c !important; }
 
-        .main-container { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .tabcontent { display: none; animation: fadeEffect 0.3s; }
         @keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
 
-        .pipeline-layout { display: flex; gap: 20px; align-items: flex-start; }
-        
-        .sidebar { background: white; width: 280px; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
-        .sidebar-title { font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .site-list { list-style: none; padding: 0; margin: 0; }
-        .site-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 8px; border-radius: 6px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; margin-bottom: 4px; }
-        .site-item:hover { background-color: #f8fafc; border-color: #e2e8f0; }
-        .site-item.active { background-color: #ecfdf5; border-color: #10b981; }
-        .site-item input[type="checkbox"] { margin-top: 3px; cursor: pointer; transform: scale(1.2); }
-        .site-name { font-size: 14px; font-weight: 500; user-select: none; line-height: 1.4; flex: 1; }
-        
-        .edit-sites-area { margin-top: 15px; padding-top: 15px; border-top: 2px dashed #e2e8f0; display: none; }
-        .edit-sites-area textarea { width: 100%; height: 150px; font-size: 13px; line-height: 1.5; white-space: pre; }
-
-        .workspace { flex: 1; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-width: 0; }
-        .workspace-header { background-color: #f0fdf4; border-left: 5px solid #10b981; padding: 15px 20px; border-radius: 4px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
-        .workspace-header h2 { margin: 0; font-size: 22px; color: #065f46; }
-        
-        .tool-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); max-width: 1000px; margin: 0 auto; }
+        .tool-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box; }
 
         .section { background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .section-title { font-weight: bold; font-size: 16px; color: #334155; margin-bottom: 12px; }
@@ -54,7 +39,7 @@
         .btn-secondary { background-color: #f59e0b; } .btn-secondary:hover { background-color: #d97706; }
         .btn-blue { background-color: #0ea5e9; } .btn-blue:hover { background-color: #0284c7; }
         .btn-ai { background-color: #8b5cf6; } .btn-ai:hover { background-color: #7c3aed; }
-        .btn-clear { background-color: #ef4444; padding: 6px 12px; font-size: 13px;} .btn-clear:hover { background-color: #dc2626; }
+        .btn-clear { background-color: #ef4444; padding: 8px 15px;} .btn-clear:hover { background-color: #dc2626; }
         .btn-full { width: 100%; padding: 15px; font-size: 16px; margin-top: 10px; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
@@ -62,6 +47,11 @@
         th { background-color: #f8fafc; color: #334155; font-weight: bold; }
         td.text-left { text-align: left; }
         .row-others { background-color: #f1f5f9; color: #64748b; } 
+        
+        /* ★ 新增：表格可編輯狀態的視覺提示 */
+        td[contenteditable="true"] { transition: background-color 0.2s; outline: none; }
+        td[contenteditable="true"]:hover { background-color: #f1f5f9; cursor: text; }
+        td[contenteditable="true"]:focus { background-color: #e0f2fe; outline: 2px solid #38bdf8; box-shadow: inset 0 0 5px rgba(0,0,0,0.1); }
         
         .status-text { font-weight: bold; font-size: 13px; margin-top: 8px; display: block; }
         .hint-text { font-size: 13px; color: #64748b; margin-top: 5px; line-height: 1.5; }
@@ -79,18 +69,23 @@
         .block-copy-btn { width: 100%; margin-top: 20px; font-size: 16px; padding: 12px; background-color: #334155; }
         .block-copy-btn:hover { background-color: #0f172a; }
 
-        /* 檢核表單專用樣式 */
-        .inspect-row { background: white; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-bottom: 10px; transition: 0.2s; }
-        .inspect-row:hover { border-color: #94a3b8; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .inspect-header { display: flex; justify-content: space-between; align-items: center; }
-        .inspect-title { font-weight: bold; font-size: 15px; color: #1e293b; flex: 1; }
-        .inspect-score { display: flex; align-items: center; gap: 10px; }
-        .inspect-score input { width: 70px; margin: 0; text-align: center; font-weight: bold; color: #0284c7; }
+        /* 檢核表單專用 - 極簡短頁面樣式 */
+        .inspect-compact-container { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; }
+        .inspect-compact-row { border-bottom: 1px solid #e2e8f0; padding: 10px 5px; transition: 0.2s; }
+        .inspect-compact-row:last-child { border-bottom: none; }
+        .inspect-compact-row:hover { background-color: #f8fafc; }
+        .inspect-compact-header { display: flex; justify-content: space-between; align-items: center; }
+        .inspect-compact-title { font-size: 14px; font-weight: bold; color: #1e293b; flex: 1; }
+        .inspect-compact-inputs { display: flex; align-items: center; gap: 8px; }
+        .inspect-compact-inputs input { width: 60px; padding: 4px; text-align: center; font-weight: bold; color: #0284c7; margin: 0; }
         
-        /* 單一圖文組的樣式 */
-        .insp-block { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; margin-bottom: 12px; position: relative; }
+        .insp-block { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; margin-bottom: 10px; position: relative; }
         .insp-block-delete { position: absolute; right: 10px; top: 10px; background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .insp-block-delete:hover { background: #dc2626; }
+        
+        /* 隱藏式設定彈窗 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -98,24 +93,193 @@
 <div class="top-navbar">
     <h1>💼 資料處理戰情中心</h1>
     <div class="tab-buttons">
-        <button class="tablinks" onclick="openTab(event, 'MonthlyPipeline')">📅 月報流水線</button>
+        <button class="tablinks" onclick="openTab(event, 'MonthlyTool')" id="defaultOpen">📅 單站月報生成</button>
         <button class="tablinks" onclick="openTab(event, 'GATool')">📊 單發週報</button>
         <button class="tablinks" onclick="openTab(event, 'SearchTool')">🔍 搜尋分類</button>
-        <button class="tablinks" onclick="openTab(event, 'SpeedTool')">⚡ 效能檢測</button>
-        <button class="tablinks" onclick="openTab(event, 'LinkTool')">🔗 無效連結</button>
+        <button class="tablinks" onclick="openTab(event, 'SpeedTool')">⚡ 效能(全站)</button>
+        <button class="tablinks" onclick="openTab(event, 'LinkTool')">🔗 無效連結(全站)</button>
+        <button class="tablinks" onclick="openTab(event, 'InspectTool')">✅ 網站檢核</button>
         <button class="tablinks" onclick="openTab(event, 'WCTool')">☁️ 文字雲</button>
-        <button class="tablinks" onclick="openTab(event, 'InspectTool')" id="defaultOpen">✅ 網站檢核</button>
+        
+        <button class="btn-setting" onclick="document.getElementById('settingsModal').style.display='flex'">⚙️ 網站清單設定</button>
         <button class="btn-reset-all" onclick="resetEntireApp()" title="強制清空所有暫存">🧹 重置全部</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">⚙️ 編輯全域網站清單</h3>
+        <p class="hint-text">此清單用於「效能檢測」、「無效連結」自動產生全站附件，以及供下拉選單使用。請一行輸入一個網站名稱。</p>
+        <textarea id="globalSiteInput" style="height:250px; font-size:13px; line-height:1.5;"></textarea>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="action-btn btn-primary" style="flex:1;" onclick="saveGlobalSites()">💾 儲存設定</button>
+            <button class="action-btn" style="flex:1; background:#94a3b8;" onclick="document.getElementById('settingsModal').style.display='none'">取消</button>
+        </div>
     </div>
 </div>
 
 <div class="main-container">
 
+    <div id="MonthlyTool" class="tabcontent">
+        <div class="tool-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0;">📅 單站月報自動生成</h2>
+                <button class="action-btn btn-clear" onclick="clearMonthlyWorkspace()">🗑️ 處理完畢，清空本頁</button>
+            </div>
+            
+            <div class="section" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div style="flex: 2; min-width: 250px;">
+                    <label>🌐 網站名稱 (可手打或下拉選擇)：</label>
+                    <input type="text" id="monthlySiteName" list="monthlySiteList" value="化學署全球資訊網" placeholder="請輸入網站名稱...">
+                    <datalist id="monthlySiteList"></datalist>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <label>📅 報表月份：</label>
+                    <input type="text" id="monthlyDateText" value="115年1月">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div class="section" style="flex: 1;">
+                    <div class="section-title">📊 1. 上傳【流量】資料</div>
+                    <input type="file" id="monthPageUpload" accept=".csv, .xlsx" />
+                    <span id="monthPageStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span>
+                </div>
+                <div class="section" style="flex: 1;">
+                    <div class="section-title">🔍 2. 上傳【搜尋】資料</div>
+                    <input type="file" id="monthSearchUpload" accept=".csv, .xlsx" />
+                    <span id="monthSearchStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span>
+                </div>
+            </div>
+
+            <button class="action-btn btn-primary btn-full" onclick="generateMonthlyReport()">✨ 3. 產出本站圖文組合包</button>
+
+            <div id="monthlyOutputArea" style="display: none; margin-top: 40px;">
+                <div class="export-block" id="blockPageExport">
+                    <h3 class="export-block-title">📊 網頁流量分析</h3>
+                    <p class="hint-text" style="margin-top:-10px;">💡 提示：產出的表格可直接點擊格子修改內容。</p>
+                    <div id="monthlyPageDraft" class="report-draft" contenteditable="true"></div>
+                    <div>
+                        <button class="action-btn btn-ai" onclick="copyDivContent('monthlyPageDraft')">📋 僅複製 AI 提示詞</button>
+                        <button class="action-btn btn-blue" onclick="copyTable('monthPageTable')">📋 僅複製表格</button>
+                    </div>
+                    <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點擊此處，按 Ctrl+V 貼上【流量與使用者】截圖..."></div>
+                    <div class="img-caption" id="captionPage1" contenteditable="true">圖：熱門單元排行</div>
+                    <div id="monthlyPageTableArea"></div>
+                    <button class="action-btn block-copy-btn" onclick="copyBlock('blockPageExport')">📦 一鍵打包複製：草稿 ＋ 截圖 ＋ 表格</button>
+                </div>
+
+                <div class="export-block" id="blockSearchExport">
+                    <h3 class="export-block-title">🔍 站內搜尋分析</h3>
+                    <p class="hint-text" style="margin-top:-10px;">💡 提示：產出的表格可直接點擊格子修改內容。</p>
+                    <div id="monthlySearchDraft" class="report-draft" contenteditable="true"></div>
+                    <div>
+                        <button class="action-btn btn-ai" onclick="copyDivContent('monthlySearchDraft')">📋 僅複製 AI 提示詞</button>
+                        <button class="action-btn btn-blue" onclick="copyTable('monthSearchTable')">📋 僅複製表格</button>
+                    </div>
+                    <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點擊此處，按 Ctrl+V 貼上【站內搜尋】截圖..."></div>
+                    <div class="img-caption" id="captionSearch1" contenteditable="true">圖：搜尋關鍵字統計</div>
+                    <div id="monthlySearchTableArea"></div>
+                    <button class="action-btn block-copy-btn" onclick="copyBlock('blockSearchExport')">📦 一鍵打包複製：草稿 ＋ 截圖 ＋ 表格</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="GATool" class="tabcontent">
+        <div class="tool-container">
+            <h2 style="margin-top:0;">📊 單發週報比對工具</h2>
+            <div class="section"><div class="section-title">上傳 GA 資料與設定</div><label>排除網頁標題關鍵字：</label><input type="text" id="gaExcludeKeywords" value="首頁, 網站導覽, 找不到網頁, Page Not Found"><input type="file" id="gaFileUpload" accept=".csv, .xlsx" /><span id="gaUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
+            <div class="section"><div class="section-title">選擇你要產生的報表</div><button class="action-btn btn-primary" onclick="generateTop30()">產生 Top 30 報表</button><hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;"><label>本週發布新聞比對 (一行一個)：</label><textarea id="gaNewsList"></textarea><button class="action-btn btn-secondary" onclick="generateWeeklyMatch()">產生新聞比對報表</button></div>
+            <div class="export-block" id="blockGAExport" style="display:none; margin-top:20px;">
+                <p class="hint-text">💡 提示：產出的表格可直接點擊格子修改內容。</p>
+                <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
+                <div id="gaResultArea"></div>
+                <button class="action-btn block-copy-btn" onclick="copyBlock('blockGAExport')">📦 打包複製：截圖 ＋ 表格</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="SearchTool" class="tabcontent">
+        <div class="tool-container">
+            <h2 style="margin-top:0;">🔍 站內搜尋獨立分類器</h2>
+            <p class="hint-text">由上到下掃描，配對成功即停止。越容易被搜的重點字，請排越上面。</p>
+            <div class="section"><div class="section-title">備用分類規則 (分類名稱 : 關鍵字1, 關鍵字2)</div><textarea id="searchRules" style="height:150px;">
+一般廢棄物/回收 : 廚餘, 回收, 垃圾, 寶特瓶, 廢棄物
+空污與機車定檢 : 空氣, 酸雨, 臭, 機車, 排氣
+碳政策與國際趨勢 : 碳費, 減碳, 碳盤查, CBAM, 淨零
+補助與罰緩 : 補助, 罰款, 檢舉, 獎勵
+噪音防治 : 噪音, 分貝, 吵
+水質與環評 : 水質, 飲用水, 污染, 環評
+化學物質與有害品 : PFAS, 蘇丹紅, 毒性, 石綿</textarea></div>
+            <div class="section"><div class="section-title">上傳搜尋字詞資料</div><input type="file" id="searchFileUpload" accept=".csv, .xlsx" /><span id="searchUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
+            <div class="export-block" id="blockSearchIndExport" style="display:none; margin-top:20px;">
+                <p class="hint-text">💡 提示：產出的表格可直接點擊格子修改內容。</p>
+                <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
+                <div id="searchResultArea"></div>
+                <button class="action-btn block-copy-btn" onclick="copyBlock('blockSearchIndExport')">📦 打包複製：截圖 ＋ 表格</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="SpeedTool" class="tabcontent">
+        <div class="tool-container">
+            <h2 style="margin-top:0;">⚡ 全站效能檢測 (總表與全附件生成)</h2>
+            <div class="section"><div class="section-title">步驟一：設定檢測時間</div><label>檢測時間 (將寫入草稿)：</label><input type="text" id="speedDateText" value="115年1月6日"></div>
+            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><p class="hint-text">請上傳效能檢測的原始 Excel 檔。系統會自動將沒有名字的「電腦版」向上對齊配對。</p><input type="file" id="speedFileUpload" accept=".csv, .xlsx" /><span id="speedUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
+
+            <div id="speedOutputArea" style="display: none; margin-top: 30px;">
+                <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 40px; border: 2px solid #cbd5e1;">
+                    <h2 style="margin-top:0; color:#334155;">📊 效能檢測總表分析</h2>
+                    <p class="hint-text">💡 提示：產出的表格可直接點擊格子修改內容。</p>
+                    <div class="export-block" id="blockSpeedDeskExport">
+                        <h3 class="export-block-title">🖥️ 電腦版檢測總結</h3>
+                        <div id="speedDesktopDraft" class="report-draft" contenteditable="true"></div>
+                        <button class="action-btn btn-ai" onclick="copyDivContent('speedDesktopDraft')">📋 僅複製 Prompt</button>
+                        <div id="speedDesktopTableArea"></div>
+                        <button class="action-btn block-copy-btn" onclick="copyBlock('blockSpeedDeskExport')">📦 打包複製電腦版總結</button>
+                    </div>
+                    <div class="export-block" id="blockSpeedMobExport">
+                        <h3 class="export-block-title">📱 行動版檢測總結</h3>
+                        <div id="speedMobileDraft" class="report-draft" contenteditable="true"></div>
+                        <button class="action-btn btn-ai" onclick="copyDivContent('speedMobileDraft')">📋 僅複製 Prompt</button>
+                        <div id="speedMobileTableArea"></div>
+                        <button class="action-btn block-copy-btn" onclick="copyBlock('blockSpeedMobExport')">📦 打包複製行動版總結</button>
+                    </div>
+                </div>
+                <h2 style="color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 10px;">📎 各網站獨立附件區塊 (依據資料自動產生)</h2>
+                <div id="speedAttachmentsArea"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="LinkTool" class="tabcontent">
+        <div class="tool-container">
+            <h2 style="margin-top:0;">🔗 全站無效連結檢測與附件生成</h2>
+            <div class="section"><div class="section-title">步驟一：設定檢測時間</div><label>檢測時間 (將寫入草稿)：</label><input type="text" id="linkDateText" value="115年1月20日至115年1月23日"></div>
+            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><p class="hint-text">請上傳包含「網站」、「無效連結」、「來源網頁」、「文字」的 Excel 檔。系統將產出制式通報文字與各站專屬的附件報表。</p><input type="file" id="linkFileUpload" accept=".csv, .xlsx" /><span id="linkUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
+
+            <div id="linkOutputArea" style="display: none; margin-top: 30px;">
+                <div class="export-block" id="blockLinkSummary">
+                    <h3 class="export-block-title">📝 無效連結制式通報文字</h3>
+                    <textarea id="linkResultArea" class="report-draft" style="height: 200px; width: 100%; border: 1px solid #cbd5e1; background: #f8fafc;" readonly></textarea>
+                    <button class="action-btn block-copy-btn" onclick="copyTextArea('linkResultArea')">📋 複製所有通報文字</button>
+                </div>
+                <h2 style="color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 10px;">📎 各網站獨立附件區塊 (包含 0 錯誤網站)</h2>
+                <p class="hint-text">💡 提示：產出的表格可直接點擊格子輸入備註或修改內容。</p>
+                <div id="linkAttachmentsArea"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="InspectTool" class="tabcontent">
-        <div class="tool-container" style="max-width: 1100px;">
-            <h2 style="margin-top:0;">✅ 網站檢核智能表單與排版產生器</h2>
+        <div class="tool-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0;">✅ 網站檢核 (短頁面智能表單)</h2>
+                <button class="action-btn btn-clear" onclick="resetInspectForm()">🗑️ 重置表單</button>
+            </div>
             <p class="hint-text" style="color: #0284c7; font-weight: bold;">
-                💡 秘訣：點擊「➕ 新增一組圖文」可無限擴充錯誤說明與截圖區。產出時系統會自動幫您標上 1. 2. 3. 的編號！
+                💡 秘訣：點擊「➕ 新增一組圖文」可無限擴充錯誤說明與截圖區。
             </p>
             
             <div class="section" style="display: flex; gap: 15px; flex-wrap: wrap;">
@@ -133,10 +297,9 @@
                 </div>
             </div>
 
-            <div class="section">
-                <div class="section-title">📝 檢核項目評分區</div>
-                <div id="inspectFormArea">
-                    </div>
+            <div class="section" style="padding: 15px;">
+                <div class="section-title">📝 檢核項目評分區 (扣分將自動展開填寫區)</div>
+                <div id="inspectFormArea" class="inspect-compact-container"></div>
             </div>
 
             <button class="action-btn btn-primary btn-full" onclick="generateInspectReport()">✨ 產出 Word 格式檢核報告</button>
@@ -144,150 +307,34 @@
             <div id="inspectOutputArea" style="display: none; margin-top: 40px;">
                 <div class="export-block" id="blockInspectExport">
                     <h3 class="export-block-title">📄 網站檢核評分表 (附件)</h3>
-                    
-                    <div style="font-family: '微軟正黑體', sans-serif; font-size: 15px; line-height: 1.8; margin-bottom: 20px; color: #333;">
+                    <p class="hint-text" style="margin-top:-10px;">💡 提示：所有表格與文字區塊皆可點擊修改。</p>
+                    <div style="font-family: '微軟正黑體', sans-serif; font-size: 15px; line-height: 1.8; margin-bottom: 20px; color: #333;" contenteditable="true">
                         <span style="font-weight: bold; font-size: 18px;">網站檢核評分表 附件4</span><br>
                         <b>網站名稱：</b> <span id="outInspSite"></span><br>
                         <b>巡檢日期：</b> <span id="outInspDate"></span><br>
                         <b>瀏覽器版本：</b> <span id="outInspBrowser"></span>
                     </div>
-
                     <div id="inspectTablesArea"></div>
-                    
                     <button class="action-btn block-copy-btn" onclick="copyBlock('blockInspectExport')">📦 一鍵打包複製所有表格</button>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div id="MonthlyPipeline" class="tabcontent">
-        <div class="pipeline-layout">
-            <div class="sidebar">
-                <div class="sidebar-title">📍 網站作業進度 <button onclick="toggleSiteEditor()" style="cursor:pointer; font-size:12px; padding:2px 5px;">⚙️ 編輯</button></div>
-                <ul class="site-list" id="siteList"></ul>
-                <div class="edit-sites-area" id="editSitesArea">
-                    <label style="font-size: 12px;">一行一個網站名稱：</label><textarea id="customSiteInput"></textarea>
-                    <button class="action-btn btn-primary" style="width: 100%; padding: 8px; margin-top: 5px;" onclick="saveCustomSites()">💾 儲存並更新清單</button>
-                </div>
-            </div>
-
-            <div class="workspace">
-                <div class="workspace-header"><h2 id="currentSiteTitle">目前處理：請由左側選擇網站</h2><button class="action-btn btn-clear" onclick="clearCurrentWorkspace()">🗑️ 清空本站暫存</button></div>
-                <div class="section"><label>📅 報表月份：</label><input type="text" id="monthlyDateText" value="115年1月"></div>
-                <div style="display: flex; gap: 20px;">
-                    <div class="section" style="flex: 1;"><div class="section-title">📊 上傳【流量】</div><input type="file" id="monthPageUpload" accept=".csv, .xlsx" /><span id="monthPageStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
-                    <div class="section" style="flex: 1;"><div class="section-title">🔍 上傳【搜尋】</div><input type="file" id="monthSearchUpload" accept=".csv, .xlsx" /><span id="monthSearchStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
-                </div>
-                <button class="action-btn btn-primary btn-full" onclick="generateMonthlyReport()">✨ 產出圖文組合包</button>
-                <div id="monthlyOutputArea" style="display: none; margin-top: 40px;">
-                    <div class="export-block" id="blockPageExport">
-                        <h3 class="export-block-title">📊 網頁流量分析</h3>
-                        <div id="monthlyPageDraft" class="report-draft" contenteditable="true"></div>
-                        <div class="paste-zone" contenteditable="true" data-placeholder="🧲 貼上截圖 (Ctrl+V)..."></div>
-                        <div id="monthlyPageTableArea"></div>
-                        <button class="action-btn block-copy-btn" onclick="copyBlock('blockPageExport')">📦 打包複製</button>
-                    </div>
-                    <div class="export-block" id="blockSearchExport">
-                        <h3 class="export-block-title">🔍 站內搜尋分析</h3>
-                        <div id="monthlySearchDraft" class="report-draft" contenteditable="true"></div>
-                        <div class="paste-zone" contenteditable="true" data-placeholder="🧲 貼上截圖 (Ctrl+V)..."></div>
-                        <div id="monthlySearchTableArea"></div>
-                        <button class="action-btn block-copy-btn" onclick="copyBlock('blockSearchExport')">📦 打包複製</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="GATool" class="tabcontent">
-        <div class="tool-container">
-            <h2 style="margin-top:0;">📊 單發週報比對工具</h2>
-            <div class="section"><div class="section-title">上傳 GA 資料與設定</div><label>排除網頁標題關鍵字：</label><input type="text" id="gaExcludeKeywords" value="首頁, 網站導覽, 找不到網頁, Page Not Found"><input type="file" id="gaFileUpload" accept=".csv, .xlsx" /><span id="gaUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
-            <div class="section"><div class="section-title">選擇你要產生的報表</div><button class="action-btn btn-primary" onclick="generateTop30()">產生 Top 30 報表</button><hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;"><label>本週發布新聞比對 (一行一個)：</label><textarea id="gaNewsList"></textarea><button class="action-btn btn-secondary" onclick="generateWeeklyMatch()">產生新聞比對報表</button></div>
-            <div class="export-block" id="blockGAExport" style="display:none; margin-top:20px;">
-                <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
-                <div id="gaResultArea"></div>
-                <button class="action-btn block-copy-btn" onclick="copyBlock('blockGAExport')">📦 打包複製：截圖 ＋ 表格</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="SearchTool" class="tabcontent">
-        <div class="tool-container">
-            <h2 style="margin-top:0;">🔍 站內搜尋獨立分類器</h2>
-            <div class="section"><div class="section-title">備用分類規則</div><textarea id="searchRules">一般廢棄物/回收 : 廚餘, 回收, 垃圾, 寶特瓶, 廢棄物\n空污與機車定檢 : 空氣, 酸雨, 臭, 機車, 排氣\n碳政策與國際趨勢 : 碳費, 減碳, 碳盤查, CBAM, 淨零\n補助與罰緩 : 補助, 罰款, 檢舉, 獎勵\n噪音防治 : 噪音, 分貝, 吵\n水質與環評 : 水質, 飲用水, 污染, 環評\n化學物質與有害品 : PFAS, 蘇丹紅, 毒性, 石綿</textarea></div>
-            <div class="section"><div class="section-title">上傳搜尋字詞資料</div><input type="file" id="searchFileUpload" accept=".csv, .xlsx" /><span id="searchUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
-            <div class="export-block" id="blockSearchIndExport" style="display:none; margin-top:20px;">
-                <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
-                <div id="searchResultArea"></div>
-                <button class="action-btn block-copy-btn" onclick="copyBlock('blockSearchIndExport')">📦 打包複製：截圖 ＋ 表格</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="SpeedTool" class="tabcontent">
-        <div class="tool-container" style="max-width: 1200px;">
-            <h2 style="margin-top:0;">⚡ 16 站效能檢測 (總表與全附件生成)</h2>
-            <div class="section"><div class="section-title">步驟一：設定檢測時間</div><label>檢測時間 (將寫入草稿)：</label><input type="text" id="speedDateText" value="115年1月6日" placeholder="115年1月6日"></div>
-            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><p class="hint-text">請上傳效能檢測的原始 Excel 檔。系統會自動產出「總結分析表」與「各別網站的附件報告區塊」。</p><input type="file" id="speedFileUpload" accept=".csv, .xlsx" /><span id="speedUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
-
-            <div id="speedOutputArea" style="display: none; margin-top: 30px;">
-                <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 40px; border: 2px solid #cbd5e1;">
-                    <h2 style="margin-top:0; color:#334155;">📊 效能檢測總表分析</h2>
-                    <div class="export-block" id="blockSpeedDeskExport">
-                        <h3 class="export-block-title">🖥️ 電腦版檢測總結</h3>
-                        <div id="speedDesktopDraft" class="report-draft" contenteditable="true"></div>
-                        <button class="action-btn btn-ai" onclick="copyDivContent('speedDesktopDraft')">📋 僅複製 Prompt 給 AI</button>
-                        <div id="speedDesktopTableArea"></div>
-                        <button class="action-btn block-copy-btn" onclick="copyBlock('blockSpeedDeskExport')">📦 打包複製電腦版總結</button>
-                    </div>
-                    <div class="export-block" id="blockSpeedMobExport">
-                        <h3 class="export-block-title">📱 行動版檢測總結</h3>
-                        <div id="speedMobileDraft" class="report-draft" contenteditable="true"></div>
-                        <button class="action-btn btn-ai" onclick="copyDivContent('speedMobileDraft')">📋 僅複製 Prompt 給 AI</button>
-                        <div id="speedMobileTableArea"></div>
-                        <button class="action-btn block-copy-btn" onclick="copyBlock('blockSpeedMobExport')">📦 打包複製行動版總結</button>
-                    </div>
-                </div>
-                <h2 style="color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 10px;">📎 各網站獨立附件區塊 (依據資料自動產生)</h2>
-                <div id="speedAttachmentsArea"></div>
-            </div>
-        </div>
-    </div>
-
     <div id="WCTool" class="tabcontent">
         <div class="tool-container">
-            <h2 style="margin-top:0;">☁️ 詞頻文字雲</h2>
+            <h2 style="margin-top:0;">☁️ 詞頻文字雲 (高密度版)</h2>
             <div class="section"><div class="section-title">上傳詞頻資料</div><input type="file" id="wcFileUpload" accept=".csv, .xlsx" /><span id="wcStatusMsg" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
-            <button id="wcDownloadBtn" class="action-btn btn-blue" style="display:none; width:100%; margin-top:20px;" onclick="downloadWordCloud()">⬇️ 下載圖片</button><div id="wcCanvasContainer" class="canvas-container" style="display: none;"><canvas id="wordCloudCanvas" width="1200" height="800"></canvas></div>
-        </div>
-    </div>
-
-    <div id="LinkTool" class="tabcontent">
-        <div class="tool-container" style="max-width: 1200px;">
-            <h2 style="margin-top:0;">🔗 16 站無效連結檢測與附件生成</h2>
-            <div class="section"><div class="section-title">步驟一：設定檢測時間</div><label>檢測時間 (將寫入草稿)：</label><input type="text" id="linkDateText" value="115年1月20日至115年1月23日"></div>
-            <div class="section"><div class="section-title">步驟二：上傳原始資料</div><p class="hint-text">請上傳包含「網站」、「無效連結」、「來源網頁」、「文字」的 Excel 檔。系統將產出制式通報文字與各站專屬的附件報表。</p><input type="file" id="linkFileUpload" accept=".csv, .xlsx" /><span id="linkUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span></div>
-
-            <div id="linkOutputArea" style="display: none; margin-top: 30px;">
-                <div class="export-block" id="blockLinkSummary">
-                    <h3 class="export-block-title">📝 無效連結制式通報文字</h3>
-                    <textarea id="linkResultArea" class="report-draft" style="height: 200px; width: 100%; border: 1px solid #cbd5e1; background: #f8fafc;" readonly></textarea>
-                    <button class="action-btn block-copy-btn" onclick="copyTextArea('linkResultArea')">📋 複製所有通報文字</button>
-                </div>
-                <h2 style="color: #0284c7; border-bottom: 2px solid #0284c7; padding-bottom: 10px;">📎 各網站獨立附件區塊 (包含 0 錯誤的網站)</h2>
-                <div id="linkAttachmentsArea"></div>
-            </div>
+            <button id="wcDownloadBtn" class="action-btn btn-blue" style="display:none; width:100%; margin-top:20px;" onclick="downloadWordCloud()">⬇️ 下載圖片</button>
+            <div id="wcCanvasContainer" class="canvas-container" style="display: none; text-align: center; margin-top: 20px;"><canvas id="wordCloudCanvas" width="1000" height="600"></canvas></div>
         </div>
     </div>
 
 </div>
 
 <script>
-    /* ---------------- 全域安全與複製機制 ---------------- */
-    function resetEntireApp() { if (confirm("⚠️ 確定要清除工具箱內所有的資料與暫存嗎？\n\n這將重置整個網頁狀態，並強制釋放瀏覽器記憶體，未複製的報表將無法復原。")) { window.location.reload(); } }
-
+    /* ---------------- 全域機制 (表格可編輯轉換) ---------------- */
+    function resetEntireApp() { if (confirm("⚠️ 確定要清除工具箱內所有的資料與暫存嗎？")) window.location.reload(); }
     function openTab(evt, tabName) {
         document.querySelectorAll(".tabcontent").forEach(el => el.style.display = "none");
         document.querySelectorAll(".tablinks").forEach(el => el.classList.remove("active"));
@@ -300,69 +347,233 @@
         let block = document.getElementById(blockId);
         let buttons = block.querySelectorAll('button'); buttons.forEach(btn => btn.style.display = 'none');
         let range = document.createRange(); range.selectNode(block); window.getSelection().removeAllRanges(); window.getSelection().addRange(range);
-        try { document.execCommand('copy'); alert('📦 整個區塊 (包含文字、截圖與表格) 已成功複製！\n您可以直接前往 Word 貼上。'); } catch (err) { alert('複製失敗。'); }
+        try { document.execCommand('copy'); alert('📦 整個區塊已成功複製！請至 Word 貼上。'); } catch (err) { alert('複製失敗。'); }
         window.getSelection().removeAllRanges();
         buttons.forEach(btn => { if(btn.classList.contains('block-copy-btn')) btn.style.display = 'block'; else btn.style.display = 'inline-flex'; });
     }
-
-    function copyTable(tableId) {
-        let table = document.getElementById(tableId); if (!table) return; let range = document.createRange(); range.selectNode(table); window.getSelection().removeAllRanges(); window.getSelection().addRange(range); try { document.execCommand('copy'); alert('✅ 表格已成功複製！'); } catch (err) {} window.getSelection().removeAllRanges();
-    }
+    function copyTable(tableId) { let table = document.getElementById(tableId); if (!table) return; let range = document.createRange(); range.selectNode(table); window.getSelection().removeAllRanges(); window.getSelection().addRange(range); try { document.execCommand('copy'); alert('✅ 表格已成功複製！'); } catch (err) {} window.getSelection().removeAllRanges(); }
     function copyTextArea(textAreaId) { let textArea = document.getElementById(textAreaId); textArea.select(); textArea.setSelectionRange(0, 99999); try { document.execCommand('copy'); alert('✅ 文字已成功複製！'); } catch (err) {} }
-    function copyDivContent(divId) { let div = document.getElementById(divId); let textToCopy = div.innerText; let tempTextarea = document.createElement("textarea"); tempTextarea.value = textToCopy; document.body.appendChild(tempTextarea); tempTextarea.select(); try { document.execCommand('copy'); alert('✅ 提示詞/草稿已成功複製！'); } catch (err) {} document.body.removeChild(tempTextarea); }
+    function copyDivContent(divId) { let div = document.getElementById(divId); let textToCopy = div.innerText; let temp = document.createElement("textarea"); temp.value = textToCopy; document.body.appendChild(temp); temp.select(); try { document.execCommand('copy'); alert('✅ 提示詞/草稿已成功複製！'); } catch (err) {} document.body.removeChild(temp); }
     function parseSafeNumber(val) { if (typeof val === 'number') return val; if (!val) return 0; let cleanVal = String(val).replace(/,/g, ''); let parsed = parseFloat(cleanVal); return isNaN(parsed) ? 0 : parsed; }
+    
+    // ★ 核心工具：將產出的 HTML 表格轉換為可編輯狀態
+    function makeTableEditable(htmlString) {
+        return htmlString.replace(/<td/g, '<td contenteditable="true"');
+    }
 
-    /* ---------------- 左側 Sidebar 站點清單管理 (LocalStorage) ---------------- */
-    const defaultSites = [
-        "化學署中文全球資訊網", "化學署英文全球資訊網", "環境用藥安全使用宣導網", "化學知識地圖", 
-        "持久性有機污染物(POPs)資訊網站", "汞水俣公約資訊網站", "環境荷爾蒙資訊網站", 
-        "化學物質環境流布調查資訊網站", "石綿資訊專區", "綠色化學應用及創新獎", 
-        "綠色化學整合專區", "國家化學物質管理會報", "鹿特丹公約資訊網站", "非農地環境雜草管理", 
-        "大專校院綠色化學創意競賽", "石綿資訊專區(英文版)", "環境事故專業技術小組", 
-        "全氟及多氟烷基物質(PFAS)管理行動計畫"
-    ];
-    let siteNames = []; let currentMonthlySite = "";
+    /* ---------------- 網站清單管理 ---------------- */
+    const defaultSites = ["化學署全球資訊網中文版", "化學署全球資訊網英文版", "環境用藥安全使用宣導網", "化學知識地圖", "持久性有機污染物(POPs)資訊網站", "汞水俣公約資訊網站", "環境荷爾蒙資訊網站", "化學物質環境流布調查資訊網站", "石綿資訊專區", "綠色化學應用及創新獎", "綠色化學整合專區", "國家化學物質管理會報", "鹿特丹公約資訊網站", "非農地環境雜草管理", "大專校院綠色化學創意競賽", "石綿資訊專區(英文版)", "環境事故專業技術小組", "全氟及多氟烷基物質(PFAS)管理行動計畫"];
+    let siteNames = [];
 
-    function loadSites() {
+    function initGlobalSites() {
         let saved = localStorage.getItem('customSites');
         if (saved) { siteNames = JSON.parse(saved); } else { siteNames = [...defaultSites]; }
-        if(siteNames.length > 0) currentMonthlySite = siteNames[0];
+        document.getElementById('globalSiteInput').value = siteNames.join('\n');
+        
+        let monthlyList = document.getElementById('monthlySiteList'); monthlyList.innerHTML = "";
+        siteNames.forEach(s => { let opt = document.createElement('option'); opt.value = s; monthlyList.appendChild(opt); });
+        
+        let inspectList = document.getElementById('inspectSiteDropdown'); inspectList.innerHTML = "";
+        siteNames.forEach(s => { let opt = document.createElement('option'); opt.value = s; opt.innerText = s; inspectList.appendChild(opt); });
     }
-    function initSidebar() {
-        loadSites();
-        const ul = document.getElementById('siteList'); ul.innerHTML = ""; 
-        siteNames.forEach((site, index) => {
-            let li = document.createElement('li'); li.className = index === 0 ? 'site-item active' : 'site-item'; li.id = 'site-item-' + index;
-            li.innerHTML = `<input type="checkbox" title="完成後可手動打勾"><span class="site-name" onclick="selectSite(${index}, '${site}')">${site}</span>`;
-            ul.appendChild(li);
-        });
-        if(siteNames.length > 0) document.getElementById('currentSiteTitle').innerText = '目前處理：' + currentMonthlySite;
-        document.getElementById('customSiteInput').value = siteNames.join('\n');
-        updateInspectSiteDropdown(); 
+    function saveGlobalSites() {
+        let input = document.getElementById('globalSiteInput').value; let newSites = input.split('\n').map(s => s.trim()).filter(s => s !== "");
+        if (newSites.length === 0) { alert("清單不能為空！"); return; }
+        localStorage.setItem('customSites', JSON.stringify(newSites)); alert("✅ 網站清單已更新並儲存！");
+        document.getElementById('settingsModal').style.display='none'; initGlobalSites();
     }
-    function toggleSiteEditor() { let area = document.getElementById('editSitesArea'); area.style.display = area.style.display === 'block' ? 'none' : 'block'; }
-    function saveCustomSites() {
-        let input = document.getElementById('customSiteInput').value; let newSites = input.split('\n').map(s => s.trim()).filter(s => s !== "");
-        if (newSites.length === 0) { alert("清單不能為空！"); return; } localStorage.setItem('customSites', JSON.stringify(newSites)); alert("✅ 網站清單已更新並儲存！"); toggleSiteEditor(); initSidebar(); clearCurrentWorkspace();
-    }
-    function selectSite(index, site) {
-        currentMonthlySite = site; document.querySelectorAll('.site-item').forEach(el => el.classList.remove('active')); document.getElementById('site-item-' + index).classList.add('active'); document.getElementById('currentSiteTitle').innerText = '目前處理：' + site; clearCurrentWorkspace();
-    }
-    function clearCurrentWorkspace() {
+    window.onload = function() { initGlobalSites(); buildInspectForm(); };
+
+    /* =========================================
+       模組 A：單站月報生成 (套用可編輯表格)
+       ========================================= */
+    let monthPageData = []; let monthPageTotals = { views: 0, users: 0, avgTime: 0 };
+    let monthSearchData = []; let monthSearchTotals = { searches: 0, users: 0 };
+
+    function clearMonthlyWorkspace() {
         document.getElementById('monthPageUpload').value = ''; document.getElementById('monthSearchUpload').value = '';
         document.getElementById('monthPageStatus').innerText = '尚未上傳'; document.getElementById('monthPageStatus').style.color = '#d32f2f';
         document.getElementById('monthSearchStatus').innerText = '尚未上傳'; document.getElementById('monthSearchStatus').style.color = '#d32f2f';
-        document.getElementById('monthlyOutputArea').style.display = 'none'; document.querySelectorAll('.paste-zone').forEach(zone => zone.innerHTML = '');
+        document.getElementById('monthlyOutputArea').style.display = 'none'; 
+        document.querySelectorAll('#MonthlyTool .paste-zone').forEach(zone => zone.innerHTML = '');
         monthPageData = []; monthPageTotals = { views: 0, users: 0, avgTime: 0 }; monthSearchData = []; monthSearchTotals = { searches: 0, users: 0 };
     }
-    
-    window.onload = function() {
-        initSidebar();
-        buildInspectForm(); 
-    };
+
+    document.getElementById('monthPageUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; document.getElementById('monthPageStatus').style.color = "#FF9800"; document.getElementById('monthPageStatus').innerText = "讀取中...";
+        let reader = new FileReader(); reader.onload = function(evt) {
+            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            monthPageData = []; monthPageTotals = { views: 0, users: 0, avgTime: 0 };
+            jsonData.forEach(row => {
+                let title = String(row["網頁標題"] || row["Page title"] || "").trim(); let views = parseSafeNumber(row["瀏覽"] || row["Views"]); let users = parseSafeNumber(row["使用者"] || row["Total users"] || row["Active users"]); let time = parseSafeNumber(row["平均參與時間"] || row["Average engagement time"]); let viewDelta = row["瀏覽 % Δ"] || row["% Δ"] || ""; let userDelta = row["使用者 % Δ"] || "";
+                if(title === "" || title.includes("總計") || title === "Totals") { if(views > monthPageTotals.views) { monthPageTotals.views = views; monthPageTotals.users = users; monthPageTotals.avgTime = time; } } 
+                else if (views > 0) { monthPageData.push({ title: title, views: views, users: users, time: time, viewDelta: viewDelta, userDelta: userDelta }); }
+            });
+            if(monthPageTotals.views === 0) { monthPageData.forEach(r => { monthPageTotals.views += r.views; monthPageTotals.users += r.users; }); }
+            monthPageData.sort((a, b) => b.views - a.views); document.getElementById('monthPageStatus').style.color = "#10b981"; document.getElementById('monthPageStatus').innerText = `✅ 讀取成功 (${monthPageData.length} 筆)`; e.target.value = '';
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    document.getElementById('monthSearchUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; document.getElementById('monthSearchStatus').style.color = "#FF9800"; document.getElementById('monthSearchStatus').innerText = "讀取中...";
+        let reader = new FileReader(); reader.onload = function(evt) {
+            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            monthSearchData = []; monthSearchTotals = { searches: 0, users: 0 };
+            jsonData.forEach(row => {
+                let term = String(row["搜尋字詞"] || row["Search term"] || "").trim(); let count = parseSafeNumber(row["搜尋次數"] || row["Event count"]); let users = parseSafeNumber(row["總人數"] || row["Total users"] || 0);
+                if(term === "" || term.includes("總計") || term === "Totals") { if(count > monthSearchTotals.searches) monthSearchTotals.searches = count; } 
+                else if (term !== "(not set)" && count > 0) { monthSearchData.push({ term: term, count: count, users: users }); }
+            });
+            if(monthSearchTotals.searches === 0) { monthSearchData.forEach(r => monthSearchTotals.searches += r.count); }
+            monthSearchData.sort((a, b) => b.count - a.count); document.getElementById('monthSearchStatus').style.color = "#10b981"; document.getElementById('monthSearchStatus').innerText = `✅ 讀取成功 (${monthSearchData.length} 筆)`; e.target.value = '';
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    function generateMonthlyReport() {
+        let dateStr = document.getElementById('monthlyDateText').value.trim();
+        let siteName = document.getElementById('monthlySiteName').value.trim() || "網站";
+        document.getElementById('captionPage1').innerText = `圖：「${siteName}」熱門單元排行`;
+        document.getElementById('captionSearch1').innerText = `圖：「${siteName}」搜尋關鍵字統計`;
+
+        if (monthPageData.length > 0) {
+            let top3 = monthPageData.slice(0, 3); let avgVPU = monthPageTotals.users > 0 ? (monthPageTotals.views / monthPageTotals.users).toFixed(2) : 0;
+            let promptText = `請作為專業數據分析師，使用「中立、客觀、專業統計呈現」風格潤飾以下草稿。勿改變數字與排名，直接輸出結果。\n\n【網站】：${siteName}\n【月份】：${dateStr}\n---\n${siteName}於${dateStr}，總瀏覽數為 ${monthPageTotals.views.toLocaleString()} 次，使用者 ${monthPageTotals.users.toLocaleString()} 位，平均每位使用者的瀏覽數 ${avgVPU} 頁，平均參與時間為 ${Math.round(monthPageTotals.avgTime)} 秒。\n\n熱門單元/網頁前三名：\n`;
+            if(top3[0]) promptText += `1.「${top3[0].title}」${top3[0].views.toLocaleString()} 次。\n`; if(top3[1]) promptText += `2.「${top3[1].title}」${top3[1].views.toLocaleString()} 次。\n`; if(top3[2]) promptText += `3.「${top3[2].title}」${top3[2].views.toLocaleString()} 次。\n`;
+            document.getElementById('monthlyPageDraft').innerText = promptText;
+            let tableHTML = `<table id="monthPageTable"><thead><tr><th>項次</th><th>網頁標題</th><th>瀏覽(次)</th><th>% Δ</th><th>使用者(人)</th><th>% Δ</th><th>瀏覽數/每人</th><th>平均參與時間(秒)</th></tr></thead><tbody>`;
+            monthPageData.slice(0, 30).forEach((item, index) => { let vpu = item.users > 0 ? (item.views / item.users).toFixed(2) : 0; tableHTML += `<tr><td>${index + 1}</td><td class="text-left">${item.title}</td><td>${item.views.toLocaleString()}</td><td>${item.viewDelta}</td><td>${item.users.toLocaleString()}</td><td>${item.userDelta}</td><td>${vpu}</td><td>${Math.round(item.time)}</td></tr>`; });
+            tableHTML += `</tbody></table>`; 
+            document.getElementById('monthlyPageTableArea').innerHTML = makeTableEditable(tableHTML);
+        } else { document.getElementById('monthlyPageDraft').innerText = "⚠️ 尚未上傳流量資料。"; document.getElementById('monthlyPageTableArea').innerHTML = ""; }
+
+        if (monthSearchData.length > 0) {
+            let top3 = monthSearchData.slice(0, 3);
+            let promptText = `請作為專業數據分析師，使用「中立、客觀、專業統計呈現」風格潤飾以下草稿。勿改變數字與排名，直接輸出結果。\n\n【網站】：${siteName}\n【月份】：${dateStr}\n---\n${dateStr}，使用${siteName}站內搜尋之次數為 ${monthSearchTotals.searches.toLocaleString()} 次。搜尋次數前三名為：\n`;
+            if(top3[0]) promptText += `1.「${top3[0].term}」${top3[0].count.toLocaleString()} 次。\n`; if(top3[1]) promptText += `2.「${top3[1].term}」${top3[1].count.toLocaleString()} 次。\n`; if(top3[2]) promptText += `3.「${top3[2].term}」${top3[2].count.toLocaleString()} 次。\n`;
+            document.getElementById('monthlySearchDraft').innerText = promptText;
+            let tableHTML = `<table id="monthSearchTable"><thead><tr><th>排行</th><th>搜尋字詞</th><th>搜尋次數</th><th>總人數</th></tr></thead><tbody>`;
+            monthSearchData.slice(0, 20).forEach((item, index) => { tableHTML += `<tr><td>${index + 1}</td><td class="text-left">${item.term}</td><td>${item.count.toLocaleString()}</td><td>${item.users.toLocaleString()}</td></tr>`; });
+            tableHTML += `</tbody></table>`; 
+            document.getElementById('monthlySearchTableArea').innerHTML = makeTableEditable(tableHTML);
+        } else { document.getElementById('monthlySearchDraft').innerText = "⚠️ 尚未上傳搜尋資料。"; document.getElementById('monthlySearchTableArea').innerHTML = ""; }
+        
+        document.getElementById('monthlyOutputArea').style.display = 'block';
+    }
 
     /* =========================================
-       模組 G：網站檢核表單與排版 (多組圖文版)
+       模組 B/C：週報與搜尋分類 (套用可編輯表格)
+       ========================================= */
+    let globalGAData = []; let globalTotalViews = 0;
+    document.getElementById('gaFileUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; let reader = new FileReader(); reader.onload = function(evt) {
+            let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            globalTotalViews = 0; let validRows = []; let excludeList = document.getElementById('gaExcludeKeywords').value.split(',').map(i => i.trim()).filter(i => i !== "");
+            json.forEach(row => { let title = row["網頁標題"] || row["Page title"] || ""; let views = parseSafeNumber(row["瀏覽"] || row["Views"]); let time = parseSafeNumber(row["平均參與時間"] || row["Average engagement time"]); if (!excludeList.some(k => title.includes(k)) && title !== "" && views > 0) { globalTotalViews += views; validRows.push({ title: title.trim(), views: views, time: time }); } });
+            validRows.sort((a, b) => b.views - a.views); validRows.forEach((item, index) => { item.rank = index + 1; }); globalGAData = validRows; document.getElementById('gaUploadStatus').style.color = "#10b981"; document.getElementById('gaUploadStatus').innerText = `✅ 成功！(${globalGAData.length} 筆)`; e.target.value = '';
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
+    function generateTop30() { if (globalGAData.length === 0) return; let tableHTML = `<table id="gaReportTable"><thead><tr><th>排行</th><th>日期</th><th>單位</th><th>新聞標題</th><th>瀏覽次數/佔比</th><th>停留時間</th></tr></thead><tbody>`; globalGAData.slice(0, 30).forEach((item, index) => { let pct = globalTotalViews === 0 ? 0 : ((item.views / globalTotalViews) * 100).toFixed(2); tableHTML += `<tr><td>${index + 1}</td><td></td><td></td><td class="text-left">${item.title}</td><td>${item.views.toLocaleString()} (${pct}%)</td><td>${Math.round(item.time)} 秒</td></tr>`; }); tableHTML += `</tbody></table>`; document.getElementById('gaResultArea').innerHTML = makeTableEditable(tableHTML); document.getElementById('blockGAExport').style.display = 'block'; }
+    function generateWeeklyMatch() { if (globalGAData.length === 0) return; let newsInput = document.getElementById('gaNewsList').value.trim(); let tableHTML = `<table id="gaReportTable"><thead><tr><th>項次</th><th>日期</th><th>單位</th><th>新聞標題</th><th>瀏覽/佔比</th><th>流量排行</th><th>停留時間</th></tr></thead><tbody>`; newsInput.split('\n').map(t => t.trim()).filter(t => t !== "").forEach((searchTitle, index) => { let match = globalGAData.find(ga => ga.title.includes(searchTitle) || searchTitle.includes(ga.title)); let viewsText = "0 (0.00%)", rankText = "-", timeText = "0 秒"; if (match) { let pct = globalTotalViews === 0 ? 0 : ((match.views / globalTotalViews) * 100).toFixed(2); viewsText = `${match.views.toLocaleString()} (${pct}%)`; rankText = match.rank; timeText = `${Math.round(match.time)} 秒`; } tableHTML += `<tr><td>${index + 1}</td><td></td><td></td><td class="text-left">${searchTitle}</td><td>${viewsText}</td><td>${rankText}</td><td>${timeText}</td></tr>`; }); tableHTML += `</tbody></table>`; document.getElementById('gaResultArea').innerHTML = makeTableEditable(tableHTML); document.getElementById('blockGAExport').style.display = 'block'; }
+
+    document.getElementById('searchFileUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; let reader = new FileReader(); reader.onload = function(evt) {
+            let data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let categories = []; document.getElementById('searchRules').value.split('\n').forEach(line => { if(line.includes(':') || line.includes('：')) { let parts = line.split(/[:：]/); categories.push({ name: parts[0].trim(), keywords: parts[1].split(/[,，、]/).map(k => k.trim().toLowerCase()).filter(k => k !== "") }); } });
+            let results = {}; let totalSearchVolume = 0;
+            data.forEach(row => { let termOriginal = String(row["搜尋字詞"] || row["Search term"] || "").trim(); let count = parseSafeNumber(row["搜尋次數"] || row["Event count"] || row["Views"]); let manualCategory = String(row["分類"] || row["Category"] || "").trim(); if (termOriginal !== "" && termOriginal !== "(not set)" && count > 0) { totalSearchVolume += count; let finalCategory = "其他/未分類"; if (manualCategory !== "") { finalCategory = manualCategory; } else { for (let i = 0; i < categories.length; i++) { if (categories[i].keywords.some(kw => termOriginal.toLowerCase().includes(kw))) { finalCategory = categories[i].name; break; } } } if (!results[finalCategory]) results[finalCategory] = { totalCount: 0, terms: {} }; results[finalCategory].totalCount += count; results[finalCategory].terms[termOriginal] = (results[finalCategory].terms[termOriginal] || 0) + count; } });
+            let resultArr = Object.keys(results).map(key => ({ categoryName: key, totalCount: results[key].totalCount, termsObj: results[key].terms })).sort((a, b) => { if (a.categoryName === "其他/未分類") return 1; if (b.categoryName === "其他/未分類") return -1; return b.totalCount - a.totalCount; });
+            let tableHTML = `<table id="searchReportTable"><thead><tr><th>項次</th><th>分類</th><th>搜尋次數/佔比</th><th>代表搜尋字詞</th></tr></thead><tbody>`; resultArr.forEach((item, index) => { if (item.totalCount === 0) return; let pct = totalSearchVolume === 0 ? 0 : ((item.totalCount / totalSearchVolume) * 100).toFixed(2); let topTerms = Object.keys(item.termsObj).map(t => ({ word: t, c: item.termsObj[t] })).sort((a, b) => b.c - a.c).slice(0, 5).map(t => `${t.word} (${t.c.toLocaleString()}次)`).join('、'); let trClass = item.categoryName === "其他/未分類" ? "class='row-others'" : ""; tableHTML += `<tr ${trClass}><td>${index + 1}</td><td>${item.categoryName}</td><td>${item.totalCount.toLocaleString()} (${pct}%)</td><td class="text-left">${topTerms}</td></tr>`; });
+            tableHTML += `</tbody></table>`; document.getElementById('searchResultArea').innerHTML = makeTableEditable(tableHTML); document.getElementById('blockSearchIndExport').style.display = 'block'; document.getElementById('searchUploadStatus').style.color = "#10b981"; document.getElementById('searchUploadStatus').innerText = `✅ 完成！`; e.target.value = '';
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    /* =========================================
+       模組 D：效能檢測 (套用可編輯表格)
+       ========================================= */
+    let speedDesktopData = []; let speedMobileData = [];
+    document.getElementById('speedFileUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; document.getElementById('speedUploadStatus').style.color = "#FF9800"; document.getElementById('speedUploadStatus').innerText = "解析中...";
+        let reader = new FileReader(); reader.onload = function(evt) {
+            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            speedDesktopData = []; speedMobileData = []; let currentSite = ""; 
+            jsonData.forEach(row => {
+                let rawSite = row["網站"] || row["網站名稱"] || row["編號"]; let site = rawSite ? String(rawSite).trim() : ""; if (site !== "" && site.toLowerCase() !== "undefined") { currentSite = site; }
+                let device = String(row["設備"] || row["裝置"] || "").trim(); let perf = parseSafeNumber(row["效能 Score"] || row["效能"]); let a11y = parseSafeNumber(row["無障礙功能 Score"] || row["無障礙功能"] || row["無障礙"]); let bp = parseSafeNumber(row["最佳做法 Score"] || row["最佳做法"]); let seo = parseSafeNumber(row["SEO Score"] || row["SEO"] || row["搜尋引擎最佳化（SEO）"]);
+                if (device !== "" && currentSite !== "") { let item = { site: currentSite, perf: perf, a11y: a11y, bp: bp, seo: seo }; if (device.includes("電腦") || device.toLowerCase().includes("desktop")) speedDesktopData.push(item); else if (device.includes("行動") || device.includes("手機") || device.toLowerCase().includes("mobile")) speedMobileData.push(item); }
+            });
+            document.getElementById('speedUploadStatus').style.color = "#10b981"; document.getElementById('speedUploadStatus').innerText = `✅ 完成！電腦版 ${speedDesktopData.length} 筆，行動版 ${speedMobileData.length} 筆。`; e.target.value = '';
+            
+            let dateStr = document.getElementById('speedDateText').value.trim();
+            if (speedDesktopData.length > 0) {
+                let deskUnder80 = speedDesktopData.filter(d => d.perf < 80); let deskUnder80Names = deskUnder80.map(d => `「${d.site}」`).join('、'); let deskOver80Count = speedDesktopData.length - deskUnder80.length; let deskA11yOver90Count = speedDesktopData.filter(d => d.a11y >= 90).length; let deskSeoMin = Math.min(...speedDesktopData.map(d => d.seo)); let deskSeoMinCount = speedDesktopData.filter(d => d.seo === deskSeoMin).length; let deskSeoMax = Math.max(...speedDesktopData.map(d => d.seo));
+                let desktopPrompt = `請作為專業分析師，客觀潤飾以下草稿：\n\n${dateStr}使用Google PageSpeed Insights工具定期檢測「化學署全球資訊網」與各主題網首頁載入效能。\n其中電腦版效能分數除${deskUnder80Names}等${deskUnder80.length}個網站未達80分以上，其餘${deskOver80Count}個網站分數都超過80分以上。「無障礙分數」有${deskA11yOver90Count}個網站達到90分以上。「搜尋引擎最佳化」有${deskSeoMinCount}個最低為${deskSeoMin}分，其餘皆為${deskSeoMax}分。`;
+                document.getElementById('speedDesktopDraft').innerText = desktopPrompt;
+                let deskTable = `<table id="speedDesktopTable"><thead><tr><th>項次</th><th>網站名稱</th><th>效能</th><th>無障礙</th><th>最佳做法</th><th>SEO</th></tr></thead><tbody>`; speedDesktopData.forEach((item, index) => { deskTable += `<tr><td>${index + 1}</td><td class="text-left">${item.site}</td><td>${item.perf}</td><td>${item.a11y}</td><td>${item.bp}</td><td>${item.seo}</td></tr>`; }); deskTable += `</tbody></table>`; document.getElementById('speedDesktopTableArea').innerHTML = makeTableEditable(deskTable);
+            }
+            if (speedMobileData.length > 0) {
+                let mobPerfMax = Math.max(...speedMobileData.map(d => d.perf)); let mobPerfMaxNames = speedMobileData.filter(d => d.perf === mobPerfMax).map(d => `「${d.site}」`).join('、'); let mobA11yMax = Math.max(...speedMobileData.map(d => d.a11y)); let mobA11yMaxNames = speedMobileData.filter(d => d.a11y === mobA11yMax).map(d => `「${d.site}」`).join('、'); let mobBpMax = Math.max(...speedMobileData.map(d => d.bp)); let mobBpMaxNames = speedMobileData.filter(d => d.bp === mobBpMax).map(d => `「${d.site}」`).join('、'); let mobSeoMin = Math.min(...speedMobileData.map(d => d.seo)); let mobSeoMinCount = speedMobileData.filter(d => d.seo === mobSeoMin).length;
+                let mobilePrompt = `請作為專業分析師，客觀潤飾以下草稿：\n\n行動版效能分數${mobPerfMaxNames}最高${mobPerfMax}分，${mobA11yMaxNames}無障礙分數最高為${mobA11yMax}分，${mobBpMaxNames}網站「最佳做法」分數最高為${mobBpMax}分。有${mobSeoMinCount}個網站「搜尋引擎最佳化」最低為${mobSeoMin}分。`;
+                document.getElementById('speedMobileDraft').innerText = mobilePrompt;
+                let mobTable = `<table id="speedMobileTable"><thead><tr><th>項次</th><th>網站名稱</th><th>效能</th><th>無障礙</th><th>最佳做法</th><th>SEO</th></tr></thead><tbody>`; speedMobileData.forEach((item, index) => { mobTable += `<tr><td>${index + 1}</td><td class="text-left">${item.site}</td><td>${item.perf}</td><td>${item.a11y}</td><td>${item.bp}</td><td>${item.seo}</td></tr>`; }); mobTable += `</tbody></table>`; document.getElementById('speedMobileTableArea').innerHTML = makeTableEditable(mobTable);
+            }
+
+            let attachmentsHTML = "";
+            siteNames.forEach((site, index) => {
+                let dData = speedDesktopData.find(d => d.site === site); let mData = speedMobileData.find(d => d.site === site);
+                let dScore = dData ? dData.perf : '未測驗'; let mScore = mData ? mData.perf : '未測驗';
+                let blockId = 'speed-attach-' + index;
+                attachmentsHTML += `
+                <div class="export-block" id="${blockId}">
+                    <h3 class="export-block-title">🔗 附件：${site}</h3>
+                    <div class="report-draft" contenteditable="true" style="font-family: '微軟正黑體'; font-weight: bold; background:transparent; border-left:none; padding:0; margin-bottom:5px;">頁效能檢測報告<br>${site}</div>
+                    <div class="report-draft" contenteditable="true" style="background:transparent; border-left:none; padding:0;">${dateStr}使用Google頁面速度分析（PageSpeed Insights）進行「${site}」速度測試，受測網站電腦診斷效能達${dScore}分，行動裝置效能達${mScore}分，詳見下述報告。</div>
+                    <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此貼上【電腦版】截圖 (Ctrl+V)..."></div><div class="img-caption" contenteditable="true">圖：「${site}」電腦效能檢測報告</div>
+                    <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此貼上【行動版】截圖 (Ctrl+V)..."></div><div class="img-caption" contenteditable="true">圖：「${site}」行動裝置效能檢測報告</div>
+                    <button class="action-btn block-copy-btn" onclick="copyBlock('${blockId}')">📦 一鍵打包：文字 ＋ 兩張截圖</button>
+                </div>`;
+            });
+            document.getElementById('speedAttachmentsArea').innerHTML = attachmentsHTML; document.getElementById('speedOutputArea').style.display = 'block';
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    /* =========================================
+       模組 F：無效連結 (套用可編輯表格)
+       ========================================= */
+    document.getElementById('linkFileUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; document.getElementById('linkUploadStatus').style.color = "#FF9800"; document.getElementById('linkUploadStatus').innerText = "解析中...";
+        let reader = new FileReader(); reader.onload = function(evt) { 
+            let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""}); 
+            let dateStr = document.getElementById('linkDateText').value.trim(); let totalSites = siteNames.length;
+            let resultText = ""; let count = 1; json.forEach(row => { let src = String(row["來源網頁"] || "").trim(); let txt = String(row["文字"] || "").trim(); if (src !== "") { resultText += `${count}.網頁(${src})連結文字[${txt}]有連線問題\n`; count++; } }); 
+            document.getElementById('linkResultArea').value = resultText || "本次檢測無發現任何無效連結。"; 
+            let siteDataMap = {}; json.forEach(row => { let site = String(row["網站"] || row["網站名稱"] || "").trim(); if (site !== "") { if (!siteDataMap[site]) siteDataMap[site] = []; siteDataMap[site].push(row); } });
+
+            let attachmentsHTML = ""; let tableCounter = 1;
+            siteNames.forEach((site, index) => {
+                let sData = siteDataMap[site] || []; let errorNum = sData.length; let blockId = 'link-attach-' + index; let draftText = "";
+                if (errorNum === 0) { if (index === 0) draftText = `${dateStr}執行「${site}」與主題網共有${totalSites}個網站無效連結檢測，本月檢測「${site}」未發現無效連結。`; else draftText = `本月檢測「${site}」未發現無效連結。`; } 
+                else { if (index === 0) draftText = `${dateStr}執行「${site}」與主題網共有${totalSites}個網站無效連結檢測，本月檢測「${site}」發現無效連結${errorNum}筆，清單如表${tableCounter}所示。`; else draftText = `本月檢測「${site}」發現無效連結${errorNum}筆，清單如表${tableCounter}所示。`; }
+
+                let tableStr = `<table style="margin-top: 0;"><thead><tr><th>項次</th><th>無效連結</th><th>來源網頁</th><th style="width:100px;">人工檢視結果</th><th>建議處理說明</th><th>是否依照建議作法</th><th>處理狀態</th></tr></thead><tbody>`;
+                if (errorNum === 0) { tableStr += `<tr><td>1</td><td class="text-left">無</td><td class="text-left">無</td><td>無</td><td class="text-left">無</td><td>-</td><td>-</td></tr>`; } 
+                else { sData.forEach((row, i) => { let badLink = String(row["無效連結"] || "").trim(); let srcLink = String(row["來源網頁"] || "").trim(); tableStr += `<tr><td>${i + 1}</td><td class="text-left" style="word-break: break-all; max-width: 250px;">${badLink}</td><td class="text-left" style="word-break: break-all; max-width: 250px;">${srcLink}</td><td>無效連結</td><td class="text-left"></td><td>待確認</td><td>待處理</td></tr>`; }); }
+                tableStr += `</tbody></table>`;
+
+                attachmentsHTML += `
+                <div class="export-block" id="${blockId}">
+                    <h3 class="export-block-title">📎 ${site} 無效連結清單</h3>
+                    <div class="report-draft" contenteditable="true" style="font-family: '微軟正黑體'; font-weight: bold; background:transparent; border-left:none; padding:0; margin-bottom:5px;">${site}</div>
+                    <div class="report-draft" contenteditable="true" style="background:transparent; border-left:none; padding:0; margin-bottom: 10px;">${draftText}</div>
+                    <div class="img-caption" style="text-align:left;" contenteditable="true">表${tableCounter}：「${site}」無效連結清單</div>
+                    ${makeTableEditable(tableStr)}
+                    <button class="action-btn block-copy-btn" onclick="copyBlock('${blockId}')">📦 一鍵打包：文字 ＋ 表格</button></div>`; tableCounter++;
+            });
+            document.getElementById('linkAttachmentsArea').innerHTML = attachmentsHTML; document.getElementById('linkOutputArea').style.display = 'block'; document.getElementById('linkUploadStatus').style.color = "#10b981"; document.getElementById('linkUploadStatus').innerText = `✅ 完成！共產出 ${totalSites} 個網站的附件。`; e.target.value = ''; 
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    /* =========================================
+       模組 G：網站檢核表單
        ========================================= */
     const inspectItems = [
         { id: 1, name: "基本要件", max: 12, isBonus: false }, { id: 2, name: "導覽功能", max: 3, isBonus: false },
@@ -378,28 +589,26 @@
         { id: 21, name: "熱門關鍵字", max: 1, isBonus: true }, { id: 22, name: "新聞內容", max: 1, isBonus: true }
     ];
 
-    function updateInspectSiteDropdown() {
-        let sel = document.getElementById('inspectSiteDropdown'); sel.innerHTML = "";
-        siteNames.forEach(site => { let opt = document.createElement('option'); opt.value = site; opt.innerText = site; sel.appendChild(opt); });
-    }
-
     function buildInspectForm() {
         let html = '';
         inspectItems.forEach(item => {
             let defaultScore = item.isBonus ? 0 : item.max;
             html += `
-            <div class="inspect-row" id="row-insp-${item.id}">
-                <div class="inspect-header">
-                    <div class="inspect-title">${item.id}. ${item.name} <span style="color:#64748b; font-size:13px; font-weight:normal;">(${item.isBonus ? '加分項，最高' : '配分'} ${item.max} 分)</span></div>
-                    <div class="inspect-score">
-                        <label>得分：</label>
+            <div class="inspect-compact-row" id="row-insp-${item.id}">
+                <div class="inspect-compact-header">
+                    <div class="inspect-compact-title">
+                        ${item.id}. ${item.name} 
+                        <span style="font-weight:normal; color:#64748b; font-size:12px;">(${item.isBonus ? '加分項, 最高' : '配分'} ${item.max} 分)</span>
+                    </div>
+                    <div class="inspect-compact-inputs">
+                        <label style="font-size:13px; font-weight:normal;">得分:</label>
                         <input type="number" id="insp-score-${item.id}" value="${defaultScore}" max="${item.max}" min="0" oninput="checkInspectScore(${item.id}, ${item.max}, ${item.isBonus})">
-                        <button class="action-btn btn-blue" style="padding: 6px 10px; font-size: 12px; margin:0;" onclick="toggleInspectDetail(${item.id})">展開圖文區</button>
+                        <button class="action-btn btn-blue" style="padding: 4px 8px; font-size: 12px; margin:0;" onclick="toggleInspectDetail(${item.id})">圖文區</button>
                     </div>
                 </div>
-                <div id="insp-detail-${item.id}" style="display: none; margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px;">
+                <div id="insp-detail-${item.id}" style="display: none; margin-top: 10px; background-color: #f1f5f9; padding: 15px; border-radius: 6px; border: 1px dashed #94a3b8;">
                     <div id="insp-blocks-${item.id}"></div>
-                    <button class="action-btn btn-secondary" style="padding: 6px 12px; font-size: 13px; margin-top: 10px;" onclick="addInspectBlock(${item.id}, ${item.isBonus})">➕ 新增一組圖文</button>
+                    <button class="action-btn btn-secondary" style="padding: 5px 12px; font-size: 12px; margin-top: 5px;" onclick="addInspectBlock(${item.id}, ${item.isBonus})">➕ 新增一組圖文</button>
                 </div>
             </div>`;
         });
@@ -408,71 +617,55 @@
     }
 
     function addInspectBlock(id, isBonus) {
-        let container = document.getElementById(`insp-blocks-${id}`);
-        let blockCount = container.children.length + 1;
+        let container = document.getElementById(`insp-blocks-${id}`); let blockCount = container.children.length + 1;
         let blockHtml = `
         <div class="insp-block">
             <button class="insp-block-delete" onclick="this.parentElement.remove()" title="刪除此組圖文">✖ 刪除</button>
             <div style="font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #475569;">📍 錯誤/說明項目 ${blockCount}</div>
             <textarea class="insp-desc" placeholder="${isBonus ? '請輸入加分內容說明...' : '請輸入不符合項目說明...'}" style="height: 60px;"></textarea>
-            <div class="paste-zone insp-img" contenteditable="true" data-placeholder="🧲 點擊此處按 Ctrl+V 貼上畫面截圖 (可連續貼多張)..." style="min-height: 40px; padding: 10px; margin-top: 8px;"></div>
+            <div class="paste-zone insp-img" contenteditable="true" data-placeholder="🧲 點擊此處按 Ctrl+V 貼上畫面截圖..." style="min-height: 40px; padding: 10px; margin-top: 8px; background:white;"></div>
         </div>`;
         container.insertAdjacentHTML('beforeend', blockHtml);
     }
 
     function checkInspectScore(id, max, isBonus) {
-        let val = parseFloat(document.getElementById(`insp-score-${id}`).value);
-        let detailDiv = document.getElementById(`insp-detail-${id}`);
-        if (!isBonus && val < max) { detailDiv.style.display = 'block'; } 
-        else if (isBonus && val > 0) { detailDiv.style.display = 'block'; }
+        let val = parseFloat(document.getElementById(`insp-score-${id}`).value); let detailDiv = document.getElementById(`insp-detail-${id}`);
+        if (!isBonus && val < max) { detailDiv.style.display = 'block'; } else if (isBonus && val > 0) { detailDiv.style.display = 'block'; }
     }
     
     function toggleInspectDetail(id) {
-        let detailDiv = document.getElementById(`insp-detail-${id}`);
-        detailDiv.style.display = detailDiv.style.display === 'none' ? 'block' : 'none';
+        let detailDiv = document.getElementById(`insp-detail-${id}`); detailDiv.style.display = detailDiv.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function resetInspectForm() {
+        if(confirm("確定要清空所有填寫的分數與截圖嗎？")) { buildInspectForm(); document.getElementById('inspectOutputArea').style.display = 'none'; }
     }
 
     function generateInspectReport() {
-        let site = document.getElementById('inspectSiteDropdown').value;
-        let date = document.getElementById('inspectDate').value;
-        let browser = document.getElementById('inspectBrowser').value;
-
-        document.getElementById('outInspSite').innerText = site;
-        document.getElementById('outInspDate').innerText = date;
-        document.getElementById('outInspBrowser').innerText = browser;
+        let site = document.getElementById('inspectSiteDropdown').value; let date = document.getElementById('inspectDate').value; let browser = document.getElementById('inspectBrowser').value;
+        document.getElementById('outInspSite').innerText = site; document.getElementById('outInspDate').innerText = date; document.getElementById('outInspBrowser').innerText = browser;
 
         let tablesHTML = ""; let totalScore = 0; let totalBonus = 0;
-
         inspectItems.forEach(item => {
             let score = parseFloat(document.getElementById(`insp-score-${item.id}`).value) || 0;
             if(item.isBonus) totalBonus += score; else totalScore += score;
 
             let blocks = document.getElementById(`insp-blocks-${item.id}`).querySelectorAll('.insp-block');
-            let descOutput = ""; let imgOutput = "";
-            let validBlocks = [];
+            let descOutput = ""; let imgOutput = ""; let validBlocks = [];
             blocks.forEach(block => {
-                let descText = block.querySelector('.insp-desc').value.trim();
-                let imgHTML = block.querySelector('.insp-img').innerHTML.trim();
-                if (descText !== "" || (imgHTML !== "" && imgHTML !== "<br>")) {
-                    validBlocks.push({ desc: descText.replace(/\n/g, '<br>'), img: imgHTML });
-                }
+                let descText = block.querySelector('.insp-desc').value.trim(); let imgHTML = block.querySelector('.insp-img').innerHTML.trim();
+                if (descText !== "" || (imgHTML !== "" && imgHTML !== "<br>")) { validBlocks.push({ desc: descText.replace(/\n/g, '<br>'), img: imgHTML }); }
             });
 
             if (validBlocks.length === 1) {
                 descOutput = validBlocks[0].desc; imgOutput = validBlocks[0].img;
             } else if (validBlocks.length > 1) {
-                validBlocks.forEach((vb, idx) => {
-                    descOutput += `<div style="margin-bottom: 15px;"><b>${idx + 1}.</b> ${vb.desc}</div>`;
-                    imgOutput += `<div style="margin-bottom: 15px;"><b>${idx + 1}.</b><br>${vb.img}</div>`;
-                });
+                validBlocks.forEach((vb, idx) => { descOutput += `<div style="margin-bottom: 15px;"><b>${idx + 1}.</b> ${vb.desc}</div>`; imgOutput += `<div style="margin-bottom: 15px;"><b>${idx + 1}.</b><br>${vb.img}</div>`; });
             }
 
-            let labelScore = item.isBonus ? `加分： ${score}` : `得分： ${score}`;
-            let labelDesc = item.isBonus ? `內容說明` : `不符合內容說明`;
-            let labelImg = item.isBonus ? `內容畫面` : `不符合內容畫面`;
-            let titleText = item.isBonus ? `${item.id}.${item.name}（加分項${item.max}分）` : `${item.id}.${item.name}`;
+            let labelScore = item.isBonus ? `加分： ${score}` : `得分： ${score}`; let labelDesc = item.isBonus ? `內容說明` : `不符合內容說明`; let labelImg = item.isBonus ? `內容畫面` : `不符合內容畫面`; let titleText = item.isBonus ? `${item.id}.${item.name}（加分項${item.max}分）` : `${item.id}.${item.name}`;
 
-            tablesHTML += `
+            let tableStr = `
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; table-layout: fixed; font-family: '微軟正黑體', sans-serif;">
                 <tr><th colspan="2" style="text-align: left; background-color: #f1f5f9; padding: 10px; border: 1px solid #cbd5e1; font-size: 15px;">${titleText} &nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0284c7;">${labelScore}</span></th></tr>
                 <tr>
@@ -481,226 +674,34 @@
                 </tr>
                 <tr><td colspan="2" style="padding: 15px; border: 1px solid #cbd5e1; height: 80px; vertical-align: top; font-size: 14px; color: #333;"><b>業務單位回覆意見：</b><br><br><br></td></tr>
             </table>`;
+            
+            tablesHTML += makeTableEditable(tableStr);
         });
-
-        let finalScore = totalScore + totalBonus;
-        tablesHTML = `<div style="font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #10b981;">🏆 本站總計評分： ${finalScore} 分 (基本 ${totalScore} + 加分 ${totalBonus})</div>` + tablesHTML;
-
-        document.getElementById('inspectTablesArea').innerHTML = tablesHTML;
-        document.getElementById('inspectOutputArea').style.display = 'block';
+        let finalScore = totalScore + totalBonus; tablesHTML = `<div style="font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #10b981;">🏆 本站總計評分： ${finalScore} 分 (基本 ${totalScore} + 加分 ${totalBonus})</div>` + tablesHTML;
+        document.getElementById('inspectTablesArea').innerHTML = tablesHTML; document.getElementById('inspectOutputArea').style.display = 'block';
     }
-
-    /* =========================================
-       模組 A：月報流水線
-       ========================================= */
-    document.getElementById('monthPageUpload').addEventListener('change', function(e) {
-        if (e.target.files.length === 0) return; document.getElementById('monthPageStatus').style.color = "#FF9800"; document.getElementById('monthPageStatus').innerText = "讀取中...";
-        let reader = new FileReader();
-        reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
-            monthPageData = []; monthPageTotals = { views: 0, users: 0, avgTime: 0 };
-            jsonData.forEach(row => {
-                let title = String(row["網頁標題"] || row["Page title"] || "").trim(); let views = parseSafeNumber(row["瀏覽"] || row["Views"]); let users = parseSafeNumber(row["使用者"] || row["Total users"] || row["Active users"]); let time = parseSafeNumber(row["平均參與時間"] || row["Average engagement time"]); let viewDelta = row["瀏覽 % Δ"] || row["% Δ"] || ""; let userDelta = row["使用者 % Δ"] || "";
-                if(title === "" || title.includes("總計") || title === "Totals") { if(views > monthPageTotals.views) { monthPageTotals.views = views; monthPageTotals.users = users; monthPageTotals.avgTime = time; } } 
-                else if (views > 0) { monthPageData.push({ title: title, views: views, users: users, time: time, viewDelta: viewDelta, userDelta: userDelta }); }
-            });
-            if(monthPageTotals.views === 0) { monthPageData.forEach(r => { monthPageTotals.views += r.views; monthPageTotals.users += r.users; }); }
-            monthPageData.sort((a, b) => b.views - a.views); document.getElementById('monthPageStatus').style.color = "#10b981"; document.getElementById('monthPageStatus').innerText = `✅ 讀取成功 (${monthPageData.length} 筆)`; e.target.value = '';
-        }; reader.readAsArrayBuffer(e.target.files[0]);
-    });
-
-    document.getElementById('monthSearchUpload').addEventListener('change', function(e) {
-        if (e.target.files.length === 0) return; document.getElementById('monthSearchStatus').style.color = "#FF9800"; document.getElementById('monthSearchStatus').innerText = "讀取中...";
-        let reader = new FileReader();
-        reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
-            monthSearchData = []; monthSearchTotals = { searches: 0, users: 0 };
-            jsonData.forEach(row => {
-                let term = String(row["搜尋字詞"] || row["Search term"] || "").trim(); let count = parseSafeNumber(row["搜尋次數"] || row["Event count"]); let users = parseSafeNumber(row["總人數"] || row["Total users"] || 0);
-                if(term === "" || term.includes("總計") || term === "Totals") { if(count > monthSearchTotals.searches) monthSearchTotals.searches = count; } 
-                else if (term !== "(not set)" && count > 0) { monthSearchData.push({ term: term, count: count, users: users }); }
-            });
-            if(monthSearchTotals.searches === 0) { monthSearchData.forEach(r => monthSearchTotals.searches += r.count); }
-            monthSearchData.sort((a, b) => b.count - a.count); document.getElementById('monthSearchStatus').style.color = "#10b981"; document.getElementById('monthSearchStatus').innerText = `✅ 讀取成功 (${monthSearchData.length} 筆)`; e.target.value = '';
-        }; reader.readAsArrayBuffer(e.target.files[0]);
-    });
-
-    function generateMonthlyReport() {
-        let dateStr = document.getElementById('monthlyDateText').value.trim();
-        let siteName = currentMonthlySite;
-
-        if (monthPageData.length > 0) {
-            let top3 = monthPageData.slice(0, 3); let avgVPU = monthPageTotals.users > 0 ? (monthPageTotals.views / monthPageTotals.users).toFixed(2) : 0;
-            let promptText = `請作為專業數據分析師，使用「中立、客觀、專業統計呈現」風格潤飾以下草稿。勿改變數字與排名，直接輸出結果。\n\n【網站】：${siteName}\n【月份】：${dateStr}\n---\n${siteName}於${dateStr}，總瀏覽數為 ${monthPageTotals.views.toLocaleString()} 次，使用者 ${monthPageTotals.users.toLocaleString()} 位，平均每位使用者的瀏覽數 ${avgVPU} 頁，平均參與時間為 ${Math.round(monthPageTotals.avgTime)} 秒。\n\n熱門單元/網頁前三名：\n`;
-            if(top3[0]) promptText += `1.「${top3[0].title}」${top3[0].views.toLocaleString()} 次。\n`; if(top3[1]) promptText += `2.「${top3[1].title}」${top3[1].views.toLocaleString()} 次。\n`; if(top3[2]) promptText += `3.「${top3[2].title}」${top3[2].views.toLocaleString()} 次。\n`;
-            document.getElementById('monthlyPageDraft').innerText = promptText;
-            let tableHTML = `<table id="monthPageTable"><thead><tr><th>項次</th><th>網頁標題</th><th>瀏覽(次)</th><th>% Δ</th><th>使用者(人)</th><th>% Δ</th><th>瀏覽數/每人</th><th>平均參與時間(秒)</th></tr></thead><tbody>`;
-            monthPageData.slice(0, 30).forEach((item, index) => { let vpu = item.users > 0 ? (item.views / item.users).toFixed(2) : 0; tableHTML += `<tr><td>${index + 1}</td><td class="text-left">${item.title}</td><td>${item.views.toLocaleString()}</td><td>${item.viewDelta}</td><td>${item.users.toLocaleString()}</td><td>${item.userDelta}</td><td>${vpu}</td><td>${Math.round(item.time)}</td></tr>`; });
-            tableHTML += `</tbody></table>`; document.getElementById('monthlyPageTableArea').innerHTML = tableHTML;
-        } else { document.getElementById('monthlyPageDraft').innerText = "⚠️ 尚未上傳流量資料。"; document.getElementById('monthlyPageTableArea').innerHTML = ""; }
-
-        if (monthSearchData.length > 0) {
-            let top3 = monthSearchData.slice(0, 3);
-            let promptText = `請作為專業數據分析師，使用「中立、客觀、專業統計呈現」風格潤飾以下草稿。勿改變數字與排名，直接輸出結果。\n\n【網站】：${siteName}\n【月份】：${dateStr}\n---\n${dateStr}，使用${siteName}站內搜尋之次數為 ${monthSearchTotals.searches.toLocaleString()} 次。搜尋次數前三名為：\n`;
-            if(top3[0]) promptText += `1.「${top3[0].term}」${top3[0].count.toLocaleString()} 次。\n`; if(top3[1]) promptText += `2.「${top3[1].term}」${top3[1].count.toLocaleString()} 次。\n`; if(top3[2]) promptText += `3.「${top3[2].term}」${top3[2].count.toLocaleString()} 次。\n`;
-            document.getElementById('monthlySearchDraft').innerText = promptText;
-            let tableHTML = `<table id="monthSearchTable"><thead><tr><th>排行</th><th>搜尋字詞</th><th>搜尋次數</th><th>總人數</th></tr></thead><tbody>`;
-            monthSearchData.slice(0, 20).forEach((item, index) => { tableHTML += `<tr><td>${index + 1}</td><td class="text-left">${item.term}</td><td>${item.count.toLocaleString()}</td><td>${item.users.toLocaleString()}</td></tr>`; });
-            tableHTML += `</tbody></table>`; document.getElementById('monthlySearchTableArea').innerHTML = tableHTML;
-        } else { document.getElementById('monthlySearchDraft').innerText = "⚠️ 尚未上傳搜尋資料。"; document.getElementById('monthlySearchTableArea').innerHTML = ""; }
-        
-        document.getElementById('monthlyOutputArea').style.display = 'block';
-    }
-
-    /* =========================================
-       模組 B：單發週報比對
-       ========================================= */
-    let globalGAData = []; let globalTotalViews = 0;
-    document.getElementById('gaFileUpload').addEventListener('change', function(e) {
-        if (e.target.files.length === 0) return; document.getElementById('gaUploadStatus').style.color = "#FF9800"; document.getElementById('gaUploadStatus').innerText = "讀取中...";
-        let reader = new FileReader();
-        reader.onload = function(evt) {
-            let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
-            globalTotalViews = 0; let validRows = []; let excludeList = document.getElementById('gaExcludeKeywords').value.split(',').map(i => i.trim()).filter(i => i !== "");
-            json.forEach(row => { let title = row["網頁標題"] || row["Page title"] || ""; let views = parseSafeNumber(row["瀏覽"] || row["Views"]); let time = parseSafeNumber(row["平均參與時間"] || row["Average engagement time"]); if (!excludeList.some(k => title.includes(k)) && title !== "" && views > 0) { globalTotalViews += views; validRows.push({ title: title.trim(), views: views, time: time }); } });
-            validRows.sort((a, b) => b.views - a.views); validRows.forEach((item, index) => { item.rank = index + 1; }); globalGAData = validRows; document.getElementById('gaUploadStatus').style.color = "#10b981"; document.getElementById('gaUploadStatus').innerText = `✅ 成功！(${globalGAData.length} 筆)`; e.target.value = '';
-        }; reader.readAsArrayBuffer(e.target.files[0]);
-    });
-    function generateTop30() {
-        if (globalGAData.length === 0) return; let tableHTML = `<table id="gaReportTable"><thead><tr><th>排行</th><th>日期</th><th>單位</th><th>新聞標題</th><th>瀏覽次數/佔比</th><th>停留時間</th></tr></thead><tbody>`;
-        globalGAData.slice(0, 30).forEach((item, index) => { let pct = globalTotalViews === 0 ? 0 : ((item.views / globalTotalViews) * 100).toFixed(2); tableHTML += `<tr><td>${index + 1}</td><td></td><td></td><td class="text-left">${item.title}</td><td>${item.views.toLocaleString()} (${pct}%)</td><td>${Math.round(item.time)} 秒</td></tr>`; });
-        tableHTML += `</tbody></table>`; document.getElementById('gaResultArea').innerHTML = tableHTML; document.getElementById('blockGAExport').style.display = 'block';
-    }
-    function generateWeeklyMatch() {
-        if (globalGAData.length === 0) return; let newsInput = document.getElementById('gaNewsList').value.trim(); let tableHTML = `<table id="gaReportTable"><thead><tr><th>項次</th><th>日期</th><th>單位</th><th>新聞標題</th><th>瀏覽/佔比</th><th>流量排行</th><th>停留時間</th></tr></thead><tbody>`;
-        newsInput.split('\n').map(t => t.trim()).filter(t => t !== "").forEach((searchTitle, index) => { let match = globalGAData.find(ga => ga.title.includes(searchTitle) || searchTitle.includes(ga.title)); let viewsText = "0 (0.00%)", rankText = "-", timeText = "0 秒"; if (match) { let pct = globalTotalViews === 0 ? 0 : ((match.views / globalTotalViews) * 100).toFixed(2); viewsText = `${match.views.toLocaleString()} (${pct}%)`; rankText = match.rank; timeText = `${Math.round(match.time)} 秒`; } tableHTML += `<tr><td>${index + 1}</td><td></td><td></td><td class="text-left">${searchTitle}</td><td>${viewsText}</td><td>${rankText}</td><td>${timeText}</td></tr>`; });
-        tableHTML += `</tbody></table>`; document.getElementById('gaResultArea').innerHTML = tableHTML; document.getElementById('blockGAExport').style.display = 'block';
-    }
-
-    /* =========================================
-       模組 C：站內搜尋分類
-       ========================================= */
-    document.getElementById('searchFileUpload').addEventListener('change', function(e) {
-        if (e.target.files.length === 0) return; document.getElementById('searchUploadStatus').style.color = "#FF9800"; document.getElementById('searchUploadStatus').innerText = "解析中...";
-        let reader = new FileReader();
-        reader.onload = function(evt) {
-            let data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
-            let categories = []; document.getElementById('searchRules').value.split('\n').forEach(line => { if(line.includes(':') || line.includes('：')) { let parts = line.split(/[:：]/); categories.push({ name: parts[0].trim(), keywords: parts[1].split(/[,，、]/).map(k => k.trim().toLowerCase()).filter(k => k !== "") }); } });
-            let results = {}; let totalSearchVolume = 0;
-            data.forEach(row => { let termOriginal = String(row["搜尋字詞"] || row["Search term"] || "").trim(); let count = parseSafeNumber(row["搜尋次數"] || row["Event count"] || row["Views"]); let manualCategory = String(row["分類"] || row["Category"] || "").trim(); if (termOriginal !== "" && termOriginal !== "(not set)" && count > 0) { totalSearchVolume += count; let finalCategory = "其他/未分類"; if (manualCategory !== "") { finalCategory = manualCategory; } else { for (let i = 0; i < categories.length; i++) { if (categories[i].keywords.some(kw => termOriginal.toLowerCase().includes(kw))) { finalCategory = categories[i].name; break; } } } if (!results[finalCategory]) results[finalCategory] = { totalCount: 0, terms: {} }; results[finalCategory].totalCount += count; results[finalCategory].terms[termOriginal] = (results[finalCategory].terms[termOriginal] || 0) + count; } });
-            let resultArr = Object.keys(results).map(key => ({ categoryName: key, totalCount: results[key].totalCount, termsObj: results[key].terms })).sort((a, b) => { if (a.categoryName === "其他/未分類") return 1; if (b.categoryName === "其他/未分類") return -1; return b.totalCount - a.totalCount; });
-            let tableHTML = `<table id="searchReportTable"><thead><tr><th>項次</th><th>分類</th><th>搜尋次數/佔比</th><th>代表搜尋字詞</th></tr></thead><tbody>`;
-            resultArr.forEach((item, index) => { if (item.totalCount === 0) return; let pct = totalSearchVolume === 0 ? 0 : ((item.totalCount / totalSearchVolume) * 100).toFixed(2); let topTerms = Object.keys(item.termsObj).map(t => ({ word: t, c: item.termsObj[t] })).sort((a, b) => b.c - a.c).slice(0, 5).map(t => `${t.word} (${t.c.toLocaleString()}次)`).join('、'); let trClass = item.categoryName === "其他/未分類" ? "class='row-others'" : ""; tableHTML += `<tr ${trClass}><td>${index + 1}</td><td>${item.categoryName}</td><td>${item.totalCount.toLocaleString()} (${pct}%)</td><td class="text-left">${topTerms}</td></tr>`; });
-            tableHTML += `</tbody></table>`; document.getElementById('searchResultArea').innerHTML = tableHTML; document.getElementById('blockSearchIndExport').style.display = 'block'; document.getElementById('searchUploadStatus').style.color = "#10b981"; document.getElementById('searchUploadStatus').innerText = `✅ 完成！`; e.target.value = '';
-        }; reader.readAsArrayBuffer(e.target.files[0]);
-    });
-
-    /* =========================================
-       模組 D：效能檢測 (全自動附件生成)
-       ========================================= */
-    let speedDesktopData = []; let speedMobileData = [];
-    document.getElementById('speedFileUpload').addEventListener('change', function(e) {
-        if (e.target.files.length === 0) return; document.getElementById('speedUploadStatus').style.color = "#FF9800"; document.getElementById('speedUploadStatus').innerText = "解析中...";
-        let reader = new FileReader();
-        reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
-            speedDesktopData = []; speedMobileData = []; let currentSite = ""; 
-            jsonData.forEach(row => {
-                let site = String(row["網站"] || row["網站名稱"] || "").trim(); if (site !== "") { currentSite = site; }
-                let device = String(row["設備"] || row["裝置"] || "").trim(); let perf = parseSafeNumber(row["效能 Score"] || row["效能"]); let a11y = parseSafeNumber(row["無障礙功能 Score"] || row["無障礙功能"] || row["無障礙"]); let bp = parseSafeNumber(row["最佳做法 Score"] || row["最佳做法"]); let seo = parseSafeNumber(row["SEO Score"] || row["SEO"] || row["搜尋引擎最佳化（SEO）"]);
-                if (device !== "" && currentSite !== "") { let item = { site: currentSite, perf: perf, a11y: a11y, bp: bp, seo: seo }; if (device.includes("電腦") || device.toLowerCase().includes("desktop")) speedDesktopData.push(item); else if (device.includes("行動") || device.includes("手機") || device.toLowerCase().includes("mobile")) speedMobileData.push(item); }
-            });
-            document.getElementById('speedUploadStatus').style.color = "#10b981"; document.getElementById('speedUploadStatus').innerText = `✅ 完成！`; e.target.value = '';
-            
-            let dateStr = document.getElementById('speedDateText').value.trim();
-            if (speedDesktopData.length > 0) {
-                let deskUnder80 = speedDesktopData.filter(d => d.perf < 80); let deskUnder80Names = deskUnder80.map(d => `「${d.site}」`).join('、'); let deskOver80Count = speedDesktopData.length - deskUnder80.length; let deskA11yOver90Count = speedDesktopData.filter(d => d.a11y >= 90).length; let deskSeoMin = Math.min(...speedDesktopData.map(d => d.seo)); let deskSeoMinCount = speedDesktopData.filter(d => d.seo === deskSeoMin).length; let deskSeoMax = Math.max(...speedDesktopData.map(d => d.seo));
-                let desktopPrompt = `請作為專業分析師，客觀潤飾以下草稿：\n\n${dateStr}使用Google PageSpeed Insights工具定期檢測「化學署全球資訊網」與各主題網首頁載入效能。\n其中電腦版效能分數除${deskUnder80Names}等${deskUnder80.length}個網站未達80分以上，其餘${deskOver80Count}個網站分數都超過80分以上。「無障礙分數」有${deskA11yOver90Count}個網站達到90分以上。「搜尋引擎最佳化」有${deskSeoMinCount}個最低為${deskSeoMin}分，其餘皆為${deskSeoMax}分。`;
-                document.getElementById('speedDesktopDraft').innerText = desktopPrompt;
-                let deskTable = `<table id="speedDesktopTable"><thead><tr><th>項次</th><th>網站名稱</th><th>效能</th><th>無障礙</th><th>最佳做法</th><th>SEO</th></tr></thead><tbody>`;
-                speedDesktopData.forEach((item, index) => { deskTable += `<tr><td>${index + 1}</td><td class="text-left">${item.site}</td><td>${item.perf}</td><td>${item.a11y}</td><td>${item.bp}</td><td>${item.seo}</td></tr>`; });
-                deskTable += `</tbody></table>`; document.getElementById('speedDesktopTableArea').innerHTML = deskTable;
-            }
-            if (speedMobileData.length > 0) {
-                let mobPerfMax = Math.max(...speedMobileData.map(d => d.perf)); let mobPerfMaxNames = speedMobileData.filter(d => d.perf === mobPerfMax).map(d => `「${d.site}」`).join('、'); let mobA11yMax = Math.max(...speedMobileData.map(d => d.a11y)); let mobA11yMaxNames = speedMobileData.filter(d => d.a11y === mobA11yMax).map(d => `「${d.site}」`).join('、'); let mobBpMax = Math.max(...speedMobileData.map(d => d.bp)); let mobBpMaxNames = speedMobileData.filter(d => d.bp === mobBpMax).map(d => `「${d.site}」`).join('、'); let mobSeoMin = Math.min(...speedMobileData.map(d => d.seo)); let mobSeoMinCount = speedMobileData.filter(d => d.seo === mobSeoMin).length;
-                let mobilePrompt = `請作為專業分析師，客觀潤飾以下草稿：\n\n行動版效能分數${mobPerfMaxNames}最高${mobPerfMax}分，${mobA11yMaxNames}無障礙分數最高為${mobA11yMax}分，${mobBpMaxNames}網站「最佳做法」分數最高為${mobBpMax}分。有${mobSeoMinCount}個網站「搜尋引擎最佳化」最低為${mobSeoMin}分。`;
-                document.getElementById('speedMobileDraft').innerText = mobilePrompt;
-                let mobTable = `<table id="speedMobileTable"><thead><tr><th>項次</th><th>網站名稱</th><th>效能</th><th>無障礙</th><th>最佳做法</th><th>SEO</th></tr></thead><tbody>`;
-                speedMobileData.forEach((item, index) => { mobTable += `<tr><td>${index + 1}</td><td class="text-left">${item.site}</td><td>${item.perf}</td><td>${item.a11y}</td><td>${item.bp}</td><td>${item.seo}</td></tr>`; });
-                mobTable += `</tbody></table>`; document.getElementById('speedMobileTableArea').innerHTML = mobTable;
-            }
-
-            let attachmentsHTML = "";
-            siteNames.forEach((site, index) => {
-                let dData = speedDesktopData.find(d => d.site === site); let mData = speedMobileData.find(d => d.site === site);
-                let dScore = dData ? dData.perf : '未測驗'; let mScore = mData ? mData.perf : '未測驗';
-                let blockId = 'speed-attach-' + index;
-                attachmentsHTML += `
-                <div class="export-block" id="${blockId}">
-                    <h3 class="export-block-title">🔗 附件：${site}</h3>
-                    <div class="report-draft" contenteditable="true" style="font-family: '微軟正黑體'; font-weight: bold; background:transparent; border-left:none; padding:0; margin-bottom:5px;">頁效能檢測報告<br>${site}</div>
-                    <div class="report-draft" contenteditable="true" style="background:transparent; border-left:none; padding:0;">${dateStr}使用Google頁面速度分析（PageSpeed Insights）進行「${site}」速度測試，受測網站電腦診斷效能達${dScore}分，行動裝置效能達${mScore}分，詳見下述報告。</div>
-                    <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此貼上【電腦版】截圖 (Ctrl+V)..."></div>
-                    <div class="img-caption">圖：「${site}」電腦效能檢測報告</div>
-                    <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此貼上【行動版】截圖 (Ctrl+V)..."></div>
-                    <div class="img-caption">圖：「${site}」行動裝置效能檢測報告</div>
-                    <button class="action-btn block-copy-btn" onclick="copyBlock('${blockId}')">📦 一鍵打包：文字 ＋ 兩張截圖</button>
-                </div>`;
-            });
-            document.getElementById('speedAttachmentsArea').innerHTML = attachmentsHTML; document.getElementById('speedOutputArea').style.display = 'block';
-        }; reader.readAsArrayBuffer(e.target.files[0]);
-    });
-
-    /* =========================================
-       模組 F：無效連結 (全自動附件生成)
-       ========================================= */
-    document.getElementById('linkFileUpload').addEventListener('change', function(e) {
-        if (e.target.files.length === 0) return; document.getElementById('linkUploadStatus').style.color = "#FF9800"; document.getElementById('linkUploadStatus').innerText = "解析中...";
-        let reader = new FileReader();
-        reader.onload = function(evt) { 
-            let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""}); 
-            let dateStr = document.getElementById('linkDateText').value.trim(); let totalSites = siteNames.length;
-            
-            let resultText = ""; let count = 1; 
-            json.forEach(row => { let src = String(row["來源網頁"] || "").trim(); let txt = String(row["文字"] || "").trim(); if (src !== "") { resultText += `${count}.網頁(${src})連結文字[${txt}]有連線問題\n`; count++; } }); 
-            document.getElementById('linkResultArea').value = resultText || "本次檢測無發現任何無效連結。"; 
-            
-            let siteDataMap = {};
-            json.forEach(row => { let site = String(row["網站"] || row["網站名稱"] || "").trim(); if (site !== "") { if (!siteDataMap[site]) siteDataMap[site] = []; siteDataMap[site].push(row); } });
-
-            let attachmentsHTML = ""; let tableCounter = 1;
-            siteNames.forEach((site, index) => {
-                let sData = siteDataMap[site] || []; let errorNum = sData.length; let blockId = 'link-attach-' + index;
-                let draftText = "";
-                if (errorNum === 0) {
-                    if (index === 0) draftText = `${dateStr}執行「${site}」與主題網共有${totalSites}個網站無效連結檢測，本月檢測「${site}」未發現無效連結。`; else draftText = `本月檢測「${site}」未發現無效連結。`;
-                } else {
-                    if (index === 0) draftText = `${dateStr}執行「${site}」與主題網共有${totalSites}個網站無效連結檢測，本月檢測「${site}」發現無效連結${errorNum}筆，清單如表${tableCounter}所示。`; else draftText = `本月檢測「${site}」發現無效連結${errorNum}筆，清單如表${tableCounter}所示。`;
-                }
-
-                attachmentsHTML += `
-                <div class="export-block" id="${blockId}">
-                    <h3 class="export-block-title">📎 ${site} 無效連結清單</h3>
-                    <div class="report-draft" contenteditable="true" style="font-family: '微軟正黑體'; font-weight: bold; background:transparent; border-left:none; padding:0; margin-bottom:5px;">${site}</div>
-                    <div class="report-draft" contenteditable="true" style="background:transparent; border-left:none; padding:0; margin-bottom: 10px;">${draftText}</div>
-                    <div class="img-caption" style="text-align:left;">表${tableCounter}：「${site}」無效連結清單</div>
-                    <table style="margin-top: 0;">
-                        <thead><tr><th>項次</th><th>無效連結</th><th>來源網頁</th><th style="width:100px;">人工檢視結果</th><th>建議處理說明</th><th>是否依照建議作法</th><th>處理狀態</th></tr></thead>
-                        <tbody>`;
-                if (errorNum === 0) { attachmentsHTML += `<tr><td>1</td><td class="text-left">無</td><td class="text-left">無</td><td>無</td><td class="text-left">無</td><td>-</td><td>-</td></tr>`; } 
-                else { sData.forEach((row, i) => { let badLink = String(row["無效連結"] || "").trim(); let srcLink = String(row["來源網頁"] || "").trim(); attachmentsHTML += `<tr><td>${i + 1}</td><td class="text-left" style="word-break: break-all; max-width: 250px;">${badLink}</td><td class="text-left" style="word-break: break-all; max-width: 250px;">${srcLink}</td><td>無效連結</td><td class="text-left"></td><td>待確認</td><td>待處理</td></tr>`; }); }
-                attachmentsHTML += `</tbody></table><button class="action-btn block-copy-btn" onclick="copyBlock('${blockId}')">📦 一鍵打包：文字 ＋ 表格</button></div>`;
-                tableCounter++;
-            });
-            document.getElementById('linkAttachmentsArea').innerHTML = attachmentsHTML; document.getElementById('linkOutputArea').style.display = 'block'; document.getElementById('linkUploadStatus').style.color = "#10b981"; document.getElementById('linkUploadStatus').innerText = `✅ 完成！共產出 ${totalSites} 個網站的附件。`; e.target.value = ''; 
-        }; reader.readAsArrayBuffer(e.target.files[0]);
-    });
 
     /* =========================================
        模組 E：文字雲
        ========================================= */
     const dark2_colors = ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#a6761d', '#666666'];
-    document.getElementById('wcFileUpload').addEventListener('change', function(e) { if (e.target.files.length === 0) return; let reader = new FileReader(); reader.onload = function(evt) { let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {header: 1}); let validRows = json.filter(row => row.length >= 2 && row[0] != null && row[1] != null && row[1] !== ""); if (validRows.length > 0 && isNaN(parseSafeNumber(validRows[0][1]))) validRows.shift(); let wordFreqList = validRows.map(r => [String(r[0]).trim(), parseSafeNumber(r[1])]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 400); document.getElementById('wcCanvasContainer').style.display = 'block'; WordCloud(document.getElementById('wordCloudCanvas'), { list: wordFreqList, fontFamily: '"微軟正黑體", sans-serif', weightFactor: function (size) { return Math.max(12, (size / wordFreqList[0][1]) * 160); }, color: function () { return dark2_colors[Math.floor(Math.random() * dark2_colors.length)]; }, minRotation: 0, maxRotation: 0, backgroundColor: 'transparent', shape: 'circle', ellipticity: 0.65, gridSize: 8 }); document.getElementById('wcStatusMsg').style.color = "#10b981"; document.getElementById('wcStatusMsg').innerText = "🎉 製作完成！"; document.getElementById('wcDownloadBtn').style.display = 'block'; e.target.value = ''; }; reader.readAsArrayBuffer(e.target.files[0]); }); 
+    document.getElementById('wcFileUpload').addEventListener('change', function(e) {
+        if (e.target.files.length === 0) return; document.getElementById('wcStatusMsg').style.color = "#FF9800"; document.getElementById('wcStatusMsg').innerText = "讀取中...";
+        let reader = new FileReader(); reader.onload = function(evt) { 
+            let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {header: 1}); 
+            let validRows = json.filter(row => row.length >= 2 && row[0] != null && row[1] != null && row[1] !== ""); 
+            if (validRows.length > 0 && isNaN(parseSafeNumber(validRows[0][1]))) validRows.shift(); 
+            let wordFreqList = validRows.map(r => [String(r[0]).trim(), parseSafeNumber(r[1])]).filter(r => r[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 400); 
+            document.getElementById('wcCanvasContainer').style.display = 'block'; 
+            WordCloud(document.getElementById('wordCloudCanvas'), { 
+                list: wordFreqList, fontFamily: '"微軟正黑體", "Microsoft JhengHei", sans-serif', 
+                weightFactor: function (size) { return Math.max(14, (size / wordFreqList[0][1]) * 180); }, 
+                color: function () { return dark2_colors[Math.floor(Math.random() * dark2_colors.length)]; }, 
+                shape: 'ellipse', ellipticity: 0.5, gridSize: 4, rotateRatio: 0, shrinkToFit: true, backgroundColor: 'transparent'
+            }); 
+            document.getElementById('wcStatusMsg').style.color = "#10b981"; document.getElementById('wcStatusMsg').innerText = "🎉 製作完成！"; document.getElementById('wcDownloadBtn').style.display = 'block'; e.target.value = ''; 
+        }; reader.readAsArrayBuffer(e.target.files[0]);
+    });
     function downloadWordCloud() { let link = document.createElement("a"); link.href = document.getElementById('wordCloudCanvas').toDataURL("image/png"); link.download = "wordcloud.png"; link.click(); }
 </script>
 

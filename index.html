@@ -6,12 +6,10 @@
     <title>個人專屬資料處理工具箱</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 0; margin: 0; background-color: #f4f7f6; color: #333; }
         
-        /* 導覽列 */
         .top-navbar { background-color: #1e293b; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; }
         .top-navbar h1 { margin: 0; font-size: 20px; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
         .tab-buttons { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
@@ -24,19 +22,18 @@
         .btn-reset-all { background-color: #ef4444 !important; color: white !important; border: 1px solid #dc2626 !important; margin-left: 5px; }
         .btn-reset-all:hover { background-color: #b91c1c !important; }
 
-        /* 主容器與區塊 */
         .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .tabcontent { display: none; animation: fadeEffect 0.3s; }
         @keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
 
         .tool-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box; }
+
         .section { background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .section-title { font-weight: bold; font-size: 16px; color: #334155; margin-bottom: 12px; }
         label { font-weight: bold; font-size: 14px; color: #475569; }
         input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
         input[type="file"] { font-size: 15px; margin-top: 10px; width: 100%; padding: 8px; background: #fff; border: 1px dashed #cbd5e1; border-radius: 4px; }
         
-        /* 按鈕樣式 */
         button.action-btn { padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: bold; color: white; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-right: 5px;}
         .btn-primary { background-color: #10b981; } .btn-primary:hover { background-color: #059669; }
         .btn-secondary { background-color: #f59e0b; } .btn-secondary:hover { background-color: #d97706; }
@@ -45,7 +42,6 @@
         .btn-clear { background-color: #ef4444; padding: 8px 15px;} .btn-clear:hover { background-color: #dc2626; }
         .btn-full { width: 100%; padding: 15px; font-size: 16px; margin-top: 10px; }
         
-        /* 表格樣式 (支援可編輯) */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
         th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
         th { background-color: #f8fafc; color: #334155; font-weight: bold; }
@@ -55,6 +51,7 @@
         td[contenteditable="true"] { transition: background-color 0.2s; outline: none; }
         td[contenteditable="true"]:hover { background-color: #f1f5f9; cursor: text; }
         td[contenteditable="true"]:focus { background-color: #e0f2fe; outline: 2px solid #38bdf8; box-shadow: inset 0 0 5px rgba(0,0,0,0.1); }
+        
         .inline-select { width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; font-family: inherit; background-color: #f8fafc; cursor: pointer; color: #0f172a; }
         .inline-select:hover { border-color: #3b82f6; }
         .inline-select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
@@ -62,9 +59,9 @@
         .status-text { font-weight: bold; font-size: 13px; margin-top: 8px; display: block; }
         .hint-text { font-size: 13px; color: #64748b; margin-top: 5px; line-height: 1.5; }
         
-        /* 產出區塊與黏貼區 */
         .export-block { border: 2px solid #e2e8f0; border-radius: 8px; padding: 25px; margin-bottom: 30px; background-color: #fff; position: relative; }
         .export-block-title { font-size: 18px; font-weight: bold; color: #0f172a; margin-top: 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
+        
         .paste-zone { border: 2px dashed #94a3b8; border-radius: 6px; padding: 20px; text-align: center; color: #64748b; min-height: 60px; margin: 10px 0; outline: none; transition: 0.3s; background-color: #ffffff; }
         .paste-zone:focus { border-color: #3b82f6; background-color: #eff6ff; }
         .paste-zone img { max-width: 100%; height: auto; display: block; margin: 10px auto; border: 1px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -255,21 +252,8 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
     <div id="GATool" class="tabcontent">
         <div class="tool-container">
             <h2 style="margin-top:0;">📊 單發週報比對工具</h2>
-            <div class="section">
-                <div class="section-title">上傳 GA 資料與設定</div>
-                <label>排除網頁標題關鍵字：</label>
-                <input type="text" id="gaExcludeKeywords" value="首頁, 網站導覽, 找不到網頁, Page Not Found">
-                <input type="file" id="gaFileUpload" accept=".csv, .xlsx" />
-                <span id="gaUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span>
-            </div>
-            <div class="section">
-                <div class="section-title">選擇你要產生的報表</div>
-                <button class="action-btn btn-primary" onclick="generateTop30()">產生 Top 30 報表</button>
-                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;">
-                <label>本週發布新聞比對 (一行一個)：</label>
-                <textarea id="gaNewsList"></textarea>
-                <button class="action-btn btn-secondary" onclick="generateWeeklyMatch()">產生新聞比對報表</button>
-            </div>
+            <div class="section"><div class="section-title">上傳 GA 資料與設定</div><label>排除網頁標題關鍵字：</label><input type="text" id="gaExcludeKeywords" value="首頁, 網站導覽, 找不到網頁, Page Not Found"><input type="file" id="gaFileUpload" accept=".csv, .xlsx" /><span id="gaUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
+            <div class="section"><div class="section-title">選擇你要產生的報表</div><button class="action-btn btn-primary" onclick="generateTop30()">產生 Top 30 報表</button><hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;"><label>本週發布新聞比對 (一行一個)：</label><textarea id="gaNewsList"></textarea><button class="action-btn btn-secondary" onclick="generateWeeklyMatch()">產生新聞比對報表</button></div>
             <div class="export-block" id="blockGAExport" style="display:none; margin-top:20px;">
                 <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
                 <div id="gaResultArea"></div>
@@ -281,19 +265,12 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
     <div id="SearchTool" class="tabcontent">
         <div class="tool-container">
             <h2 style="margin-top:0;">🔍 站內搜尋獨立分類器</h2>
-            <div class="section">
-                <div class="section-title">備用分類規則</div>
-                <textarea id="searchRules" style="height:150px;">一般廢棄物/回收 : 廚餘, 回收, 垃圾, 寶特瓶
+            <div class="section"><div class="section-title">備用分類規則</div><textarea id="searchRules" style="height:150px;">一般廢棄物/回收 : 廚餘, 回收, 垃圾, 寶特瓶
 空污與機車定檢 : 空氣, 酸雨, 臭, 機車, 排氣
 碳政策與國際趨勢 : 碳費, 減碳, 碳盤查, CBAM
 補助與罰緩 : 補助, 罰款, 檢舉, 獎勵
-化學物質與有害品 : PFAS, 蘇丹紅, 毒性, 石綿</textarea>
-            </div>
-            <div class="section">
-                <div class="section-title">上傳搜尋字詞資料</div>
-                <input type="file" id="searchFileUpload" accept=".csv, .xlsx" />
-                <span id="searchUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span>
-            </div>
+化學物質與有害品 : PFAS, 蘇丹紅, 毒性, 石綿</textarea></div>
+            <div class="section"><div class="section-title">上傳搜尋字詞資料</div><input type="file" id="searchFileUpload" accept=".csv, .xlsx" /><span id="searchUploadStatus" class="status-text" style="color: #d32f2f;">尚未上傳資料</span></div>
             <div class="export-block" id="blockSearchIndExport" style="display:none; margin-top:20px;">
                 <div class="paste-zone" contenteditable="true" data-placeholder="🧲 點此 Ctrl+V 貼上截圖..."></div>
                 <div id="searchResultArea"></div>
@@ -415,7 +392,7 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
 </div>
 
 <script>
-    /* ---------------- 全域機制：神級複製 (Select 轉純文字) ---------------- */
+    /* ---------------- 全域機制：神級複製與強固解析 ---------------- */
     function resetEntireApp() { 
         if (confirm("⚠️ 確定要清除工具箱內所有的資料與暫存嗎？")) {
             window.location.reload(); 
@@ -430,11 +407,9 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
     }
     document.getElementById("defaultOpen").click();
 
-    // ★ 神級複製函數：打包與複製時，將下拉選單瞬間轉為純文字
     function execCopyWithFormControls(containerElement, successMsg = '✅ 複製成功！') {
         if (!containerElement) return;
 
-        // 1. 隱藏所有按鈕避免被複製進 Word
         let buttons = containerElement.querySelectorAll('button');
         let btnStates = [];
         buttons.forEach(btn => { 
@@ -442,35 +417,26 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
             btn.style.display = 'none'; 
         });
 
-        // 2. 尋找所有 <select>，暫時替換為純文字 <span>
         let selects = containerElement.querySelectorAll('select');
         let replacements = [];
         selects.forEach(sel => {
             let span = document.createElement('span');
-            span.innerText = sel.value; // 抓取當前選擇的值
+            span.innerText = sel.value; 
             replacements.push({ parent: sel.parentNode, select: sel, span: span });
             sel.parentNode.replaceChild(span, sel);
         });
 
-        // 3. 執行選取與複製
         let range = document.createRange();
         range.selectNode(containerElement);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
-        try { 
-            document.execCommand('copy'); 
-            alert(successMsg); 
-        } catch (err) { 
-            alert('複製失敗。'); 
-        }
+        try { document.execCommand('copy'); alert(successMsg); } catch (err) { alert('複製失敗。'); }
         window.getSelection().removeAllRanges();
 
-        // 4. 恢復 <select> 與按鈕 (讓網頁維持可繼續互動的狀態)
         replacements.forEach(rep => { rep.parent.replaceChild(rep.select, rep.span); });
         buttons.forEach((btn, idx) => { btn.style.display = btnStates[idx]; });
     }
 
-    // 相容舊的函數呼叫
     function copyBlock(blockId) { execCopyWithFormControls(document.getElementById(blockId), '📦 整個區塊已成功複製！請至 Word 貼上。'); }
     function copyTable(tableId) { execCopyWithFormControls(document.getElementById(tableId), '✅ 表格已成功複製！'); }
     
@@ -497,6 +463,28 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         let cleanVal = String(val).replace(/,/g, ''); 
         let parsed = parseFloat(cleanVal); 
         return isNaN(parsed) ? 0 : parsed; 
+    }
+
+    // ★ 核心抗干擾函數：跳過 GA4 前方垃圾列，精準抓取表頭
+    function parseRobustData(resultBuffer) {
+        let wb = XLSX.read(new Uint8Array(resultBuffer), {type: 'array'});
+        let sheet = wb.Sheets[wb.SheetNames[0]];
+        let rawArr = XLSX.utils.sheet_to_json(sheet, {header: 1});
+        let hIdx = 0;
+        for(let i = 0; i < Math.min(20, rawArr.length); i++) {
+            let row = rawArr[i];
+            if (!row || row.length === 0) continue;
+            let str = row.join("").toLowerCase();
+            if(str.includes("網頁標題") || str.includes("page title") || 
+               str.includes("搜尋字詞") || str.includes("search term") || 
+               str.includes("來源") || str.includes("source") ||
+               str.includes("日期") || str.includes("date") || str.includes("day") || str.includes("日") ||
+               str.includes("瀏覽") || str.includes("views") ||
+               str.includes("標題") || str.includes("title")) {
+                hIdx = i; break;
+            }
+        }
+        return XLSX.utils.sheet_to_json(sheet, {range: hIdx, defval: ""});
     }
 
     /* ---------------- 網站清單管理 ---------------- */
@@ -538,12 +526,8 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         buildInspectForm(); 
     };
 
-    /* =========================================
-       ★ 輔助函數：動態產生下拉選單 HTML
-       ========================================= */
     function generateSelectHTML(optionsArray, selectedValue) {
         let options = [...optionsArray];
-        // 確保手動填寫的值或未分類在清單中
         if (selectedValue && !options.includes(selectedValue)) options.push(selectedValue);
         let html = `<select class="inline-select">`;
         options.forEach(opt => {
@@ -555,18 +539,31 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
     }
 
     /* =========================================
-       模組 A：日流量趨勢對齊引擎
+       ★ 模組 A：日流量趨勢對齊引擎 (包含中文日期強制解析)
        ========================================= */
     let trendCurDataMap = {}; 
     let trendPrevDataMap = {};
     
     function extractDay(dateVal) {
+        if (dateVal === undefined || dateVal === null || dateVal === "") return null;
+        if (typeof dateVal === 'number') {
+            let date = new Date(Math.round((dateVal - 25569) * 86400 * 1000));
+            return date.getDate();
+        }
         let dStr = String(dateVal).trim(); 
         if(!dStr) return null;
+
+        // ★ 新增：強制解析「2026年1月1日」這種中文格式
+        let zhMatch = dStr.match(/(?:年|月)?(\d{1,2})日/);
+        if (zhMatch) return parseInt(zhMatch[1], 10);
+
         if (/^\d{1,2}$/.test(dStr)) return parseInt(dStr, 10);
         if (/^\d{8}$/.test(dStr)) return parseInt(dStr.substring(6, 8), 10); 
         let parts = dStr.split(/[-/]/); 
-        if(parts.length >= 3) return parseInt(parts[2].substring(0,2), 10);
+        if(parts.length >= 3) {
+            if (parts[0].length === 4) return parseInt(parts[2].substring(0,2), 10);
+            if (parts[2].length === 4) return parseInt(parts[1].substring(0,2), 10);
+        }
         let parsed = new Date(dStr); 
         if(!isNaN(parsed.getTime())) return parsed.getDate();
         return null;
@@ -577,16 +574,26 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         document.getElementById('trendCurStatus').innerText = "讀取中...";
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let jsonData = parseRobustData(evt.target.result);
             trendCurDataMap = {}; 
             jsonData.forEach(row => { 
-                let dateVal = row["日期"] || row["Date"] || row["Nth day"] || ""; 
-                let views = parseSafeNumber(row["瀏覽"] || row["Views"] || row["活躍使用者"] || row["Active users"]); 
+                let dateKey = Object.keys(row).find(k => k.includes("日期") || k.includes("日") || k.toLowerCase().includes("date") || k.toLowerCase().includes("day")) || Object.keys(row)[0];
+                let viewsKey = Object.keys(row).find(k => k.includes("瀏覽") || k.toLowerCase().includes("view") || k.includes("使用者") || k.toLowerCase().includes("user")) || Object.keys(row)[1];
+
+                let dateVal = row[dateKey]; 
+                let views = parseSafeNumber(row[viewsKey]); 
                 let day = extractDay(dateVal); 
                 if(day !== null && day >= 1 && day <= 31) { trendCurDataMap[day] = views; } 
             });
-            document.getElementById('trendCurStatus').style.color = "#10b981"; 
-            document.getElementById('trendCurStatus').innerText = `✅ 本月資料已讀取`; 
+            
+            let count = Object.keys(trendCurDataMap).length;
+            if(count === 0) {
+                document.getElementById('trendCurStatus').style.color = "#d32f2f"; 
+                document.getElementById('trendCurStatus').innerText = `⚠️ 讀取失敗，請確認欄位`; 
+            } else {
+                document.getElementById('trendCurStatus').style.color = "#10b981"; 
+                document.getElementById('trendCurStatus').innerText = `✅ 本月已讀取 (${count}筆)`; 
+            }
             e.target.value = '';
         }; 
         reader.readAsArrayBuffer(e.target.files[0]);
@@ -597,16 +604,26 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         document.getElementById('trendPrevStatus').innerText = "讀取中...";
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let jsonData = parseRobustData(evt.target.result);
             trendPrevDataMap = {}; 
             jsonData.forEach(row => { 
-                let dateVal = row["日期"] || row["Date"] || row["Nth day"] || ""; 
-                let views = parseSafeNumber(row["瀏覽"] || row["Views"] || row["活躍使用者"] || row["Active users"]); 
+                let dateKey = Object.keys(row).find(k => k.includes("日期") || k.includes("日") || k.toLowerCase().includes("date") || k.toLowerCase().includes("day")) || Object.keys(row)[0];
+                let viewsKey = Object.keys(row).find(k => k.includes("瀏覽") || k.toLowerCase().includes("view") || k.includes("使用者") || k.toLowerCase().includes("user")) || Object.keys(row)[1];
+
+                let dateVal = row[dateKey]; 
+                let views = parseSafeNumber(row[viewsKey]); 
                 let day = extractDay(dateVal); 
                 if(day !== null && day >= 1 && day <= 31) { trendPrevDataMap[day] = views; } 
             });
-            document.getElementById('trendPrevStatus').style.color = "#10b981"; 
-            document.getElementById('trendPrevStatus').innerText = `✅ 前月資料已讀取`; 
+            
+            let count = Object.keys(trendPrevDataMap).length;
+            if(count === 0) {
+                document.getElementById('trendPrevStatus').style.color = "#d32f2f"; 
+                document.getElementById('trendPrevStatus').innerText = `⚠️ 讀取失敗，請確認欄位`; 
+            } else {
+                document.getElementById('trendPrevStatus').style.color = "#10b981"; 
+                document.getElementById('trendPrevStatus').innerText = `✅ 前月已讀取 (${count}筆)`; 
+            }
             e.target.value = '';
         }; 
         reader.readAsArrayBuffer(e.target.files[0]);
@@ -628,7 +645,7 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
                 prevViews = trendPrevDataMap[prevDay] !== undefined ? trendPrevDataMap[prevDay] : ""; 
                 prevDayLabel = prevDay; 
             }
-            tableHTML += `<tr><td>${i}</td><td>${curViews}</td><td>${prevViews}</td><td>${prevDayLabel}</td></tr>`;
+            tableHTML += `<tr><td contenteditable="true">${i}</td><td contenteditable="true">${curViews}</td><td contenteditable="true">${prevViews}</td><td contenteditable="true">${prevDayLabel}</td></tr>`;
         }
         tableHTML += `</tbody></table>`; 
         document.getElementById('trendTableContainer').innerHTML = tableHTML; 
@@ -660,14 +677,13 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         trendCurDataMap = {}; trendPrevDataMap = {};
     }
 
-    // 上傳網頁流量
     document.getElementById('monthPageUpload').addEventListener('change', function(e) {
         if (e.target.files.length === 0) return; 
         document.getElementById('monthPageStatus').style.color = "#FF9800"; 
         document.getElementById('monthPageStatus').innerText = "讀取中...";
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let jsonData = parseRobustData(evt.target.result);
             monthPageData = []; 
             monthPageTotals = { views: 0, users: 0, avgTime: 0 };
             
@@ -690,7 +706,6 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
                 if(title === "" || title.includes("總計") || title === "Totals") { 
                     if(views > monthPageTotals.views) { monthPageTotals.views = views; monthPageTotals.users = users; monthPageTotals.avgTime = time; } 
                 } else if (views > 0) { 
-                    // 優先吃 Excel 的手動分類
                     let manualCat = String(row["分類"] || row["網頁屬性"] || row["Category"] || "").trim();
                     let pCategory = manualCat !== "" ? manualCat : "其他/未分類";
                     if(manualCat === "") {
@@ -711,14 +726,13 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         reader.readAsArrayBuffer(e.target.files[0]);
     });
 
-    // 上傳站內搜尋
     document.getElementById('monthSearchUpload').addEventListener('change', function(e) {
         if (e.target.files.length === 0) return; 
         document.getElementById('monthSearchStatus').style.color = "#FF9800"; 
         document.getElementById('monthSearchStatus').innerText = "讀取中...";
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let jsonData = parseRobustData(evt.target.result);
             monthSearchData = []; 
             monthSearchTotals = { searches: 0, users: 0 };
             jsonData.forEach(row => {
@@ -740,14 +754,13 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         reader.readAsArrayBuffer(e.target.files[0]);
     });
 
-    // 上傳來源管道
     document.getElementById('monthSourceUpload').addEventListener('change', function(e) {
         if (e.target.files.length === 0) return; 
         document.getElementById('monthSourceStatus').style.color = "#FF9800"; 
         document.getElementById('monthSourceStatus').innerText = "讀取中...";
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let jsonData = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let jsonData = parseRobustData(evt.target.result);
             monthSourceData = []; 
             monthSourceTotals = { views: 0, users: 0 };
             jsonData.forEach(row => {
@@ -772,7 +785,6 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         reader.readAsArrayBuffer(e.target.files[0]);
     });
 
-    // 生成月報組合包
     function generateMonthlyReport() {
         let dateStr = document.getElementById('monthlyDateText').value.trim();
         let siteName = document.getElementById('monthlySiteName').value.trim() || "網站";
@@ -889,7 +901,7 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         if (e.target.files.length === 0) return; 
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let json = parseRobustData(evt.target.result);
             globalTotalViews = 0; 
             let validRows = []; 
             let excludeList = document.getElementById('gaExcludeKeywords').value.split(',').map(i => i.trim()).filter(i => i !== "");
@@ -953,7 +965,7 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         if (e.target.files.length === 0) return; 
         let reader = new FileReader(); 
         reader.onload = function(evt) {
-            let data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(evt.target.result), {type: 'array'}).SheetNames[0]], {defval: ""});
+            let data = parseRobustData(evt.target.result);
             let categories = []; 
             document.getElementById('searchRules').value.split('\n').forEach(line => { 
                 if(line.includes(':') || line.includes('：')) { 

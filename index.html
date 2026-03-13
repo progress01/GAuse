@@ -1691,6 +1691,7 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         }
 
         let processedData = [];
+        let botData = []; // 新增：用來存放被隔離的 Freego 或爬蟲
 
         // 1. 解析與尋找欄位
         trafficAcqData.forEach(row => {
@@ -1698,33 +1699,48 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
             let hourKey = Object.keys(row).find(k => k.includes("小時") || k.includes("Hour"));
             let sessionKey = Object.keys(row).find(k => k.includes("工作階段") || k.includes("Sessions"));
             let engageKey = Object.keys(row).find(k => k.includes("參與度") || k.includes("Engagement rate"));
+            // 抓出照妖鏡欄位：事件數
+            let epsKey = Object.keys(row).find(k => k.includes("每個工作階段的事件數") || k.includes("Events per session")); 
 
             if (channelKey && sessionKey && engageKey) {
                 let sessions = parseSafeNumber(row[sessionKey]);
-                // 過濾極低流量雜訊，避免干擾標準差
-                if (sessions >= 10) {
-                    processedData.push({
-                        channel: String(row[channelKey]).trim(),
-                        hour: hourKey ? String(row[hourKey]).trim() : "-",
-                        sessions: sessions,
-                        engagementRate: parseSafeNumber(row[engageKey])
-                    });
+                let eps = epsKey ? parseSafeNumber(row[epsKey]) : 0;
+                let engageRate = parseSafeNumber(row[engageKey]);
+                
+                let item = {
+                    channel: String(row[channelKey]).trim(),
+                    hour: hourKey ? String(row[hourKey]).trim() : "-",
+                    sessions: sessions,
+                    engagementRate: engageRate,
+                    eps: eps
+                };
+
+                // 🛑 防毒分流機制：抓出 Freego 與傳統爬蟲
+                // 特徵 A：事件數大於 20 (高互動爬蟲如 Freego)
+                // 特徵 B：參與度為 0 且 流量大 (傳統低級爬蟲)
+                if (sessions > 10 && (eps > 20 || engageRate === 0)) {
+                    item.health = "🤖 異常掃描 (已排除計算)";
+                    botData.push(item);
+                } 
+                // 正常人類流量 (排除極低流量雜訊)
+                else if (sessions >= 10) {
+                    processedData.push(item);
                 }
             }
         });
 
         if (processedData.length === 0) {
-            alert("⚠️ 找不到必要欄位，請確保包含：管道/來源、工作階段、參與度");
+            alert("⚠️ 扣除異常掃描流量後，找不到足夠的有效資料來分析。");
             return;
         }
 
-        // 2. 計算標準差 (Z-Score)
+        // 2. 「只對正常人類流量」計算標準差 (Z-Score)
         let sessionsArr = processedData.map(d => d.sessions);
         let engageArr = processedData.map(d => d.engagementRate);
-        let sessionsZ = calculateZScores(sessionsArr); // 呼叫下方的共用函數
+        let sessionsZ = calculateZScores(sessionsArr);
         let engageZ = calculateZScores(engageArr);
 
-        // 3. 判定健康度四象限
+        // 3. 判定健康度四象限 (只針對正常流量)
         processedData.forEach((d, idx) => {
             d.zSession = sessionsZ[idx];
             d.zEngage = engageZ[idx];
@@ -1735,28 +1751,42 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
             else d.health = "✅ 表現平穩";
         });
 
-        // 依流量大小排序
-        processedData.sort((a, b) => b.sessions - a.sessions);
+        // 4. 將正常資料與被隔離的機器人資料合併，準備顯示
+        let finalData = processedData.concat(botData);
 
-        // 4. 產生報表
+        // 依流量大小排序
+        finalData.sort((a, b) => b.sessions - a.sessions);
+
+        // 5. 產生報表
         let tableHTML = `<table id="trafficHealthTable" style="margin-top:0;">
             <thead style="position: sticky; top: 0; z-index: 10;"><tr>
                 <th>流量管道/來源</th>
                 <th>時段 (小時)</th>
                 <th>工作階段<br>(流量大小)</th>
                 <th>參與度<br>(流量品質)</th>
+                <th>事件數/每人<br>(機器人特徵)</th>
                 <th>綜合健康度診斷</th>
             </tr></thead><tbody>`; 
         
-        processedData.forEach((d) => { 
+        finalData.forEach((d) => { 
             let engagePct = d.engagementRate > 1 ? d.engagementRate.toFixed(2) : (d.engagementRate * 100).toFixed(2);
-            let healthColor = d.health.includes("黃金") ? '#10b981' : (d.health.includes("虛胖") ? '#ef4444' : '#333');
+            let epsText = d.eps > 0 ? d.eps.toFixed(1) : "-";
+            
+            // 設定顏色：黃金(綠)、虛胖(紅)、機器人(灰)
+            let healthColor = '#333';
+            if (d.health.includes("黃金")) healthColor = '#10b981';
+            else if (d.health.includes("虛胖")) healthColor = '#ef4444';
+            else if (d.health.includes("機器人") || d.health.includes("掃描")) healthColor = '#94a3b8';
 
-            tableHTML += `<tr>
+            // 如果是機器人，整行背景變淺灰色以示區別
+            let rowStyle = d.health.includes("掃描") ? 'background-color: #f8fafc; color: #94a3b8;' : '';
+
+            tableHTML += `<tr style="${rowStyle}">
                 <td class="text-left" contenteditable="true"><b>${d.channel}</b></td>
                 <td contenteditable="true">${d.hour}</td>
                 <td contenteditable="true">${d.sessions.toLocaleString()}</td>
                 <td contenteditable="true">${engagePct}%</td>
+                <td contenteditable="true">${epsText}</td>
                 <td class="text-left" contenteditable="true" style="color: ${healthColor}; font-weight: bold;">${d.health}</td>
             </tr>`; 
         }); 

@@ -103,6 +103,7 @@
         <button class="tablinks" onclick="openTab(event, 'LinkTool')">🔗 無效連結(全站)</button>
         <button class="tablinks" onclick="openTab(event, 'InspectTool')">✅ 網站檢核</button>
         <button class="tablinks" onclick="openTab(event, 'WCTool')">☁️ 文字雲</button>
+        <button class="tablinks" onclick="openTab(event, 'NewTableTool')">🌟 GA4流量使用</button>
         
         <button class="btn-setting" onclick="document.getElementById('settingsModal').style.display='flex'">⚙️ 網站清單</button>
         <button class="btn-reset-all" onclick="resetEntireApp()" title="強制清空所有暫存">🧹 重置全部</button>
@@ -425,9 +426,27 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         </div>
     </div>
 
-</div>
+    <div id="NewTableTool" class="tabcontent">
+        <div class="tool-container">
+            <h2 style="margin-top:0;">🌟 GA4流量使用工具</h2>
+            
+            <div class="section">
+                <div class="section-title">步驟一：上傳資料</div>
+                <div class="format-hint">必備欄位：欄位A、欄位B</div><br>
+                <input type="file" id="newToolUpload" accept=".csv, .xlsx" />
+                <span id="newToolStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span>
+            </div>
 
-<script>
+            <button class="action-btn btn-primary" onclick="processNewTable()">⚡ 產生報表</button>
+
+            <div class="export-block" id="blockNewToolExport" style="display:none; margin-top:20px;">
+                <h3 class="export-block-title">📊 產出結果</h3>
+                <div id="newToolResultArea"></div>
+            </div>
+        </div>
+    </div>
+
+</div> <script>
     /* ---------------- 全域機制：解析與複製 ---------------- */
     function resetEntireApp() { 
         if (confirm("⚠️ 確定要清除工具箱內所有的資料與暫存嗎？")) {
@@ -1559,7 +1578,6 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         reader.onload = function(evt) { 
             let json = parseRobustData(evt.target.result);
             
-            // 轉換回二維陣列給 WordCloud 吃
             let validRows = [];
             json.forEach(row => {
                 let keys = Object.keys(row);
@@ -1607,6 +1625,49 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         link.download = "wordcloud.png"; 
         link.click(); 
     }
+
+    /* =========================================
+       模組 H：GA4流量使用 
+       ========================================= */
+    let newToolData = []; // 用來存你的新資料
+
+    // 1. 監聽檔案上傳
+    document.getElementById('newToolUpload').addEventListener('change', function(e) { 
+        if (e.target.files.length === 0) return; 
+        document.getElementById('newToolStatus').innerText = "讀取中..."; 
+        let reader = new FileReader(); 
+        
+        reader.onload = function(evt) { 
+            let json = parseRobustData(evt.target.result); 
+            
+            newToolData = json; 
+
+            document.getElementById('newToolStatus').style.color = "#10b981"; 
+            document.getElementById('newToolStatus').innerText = `✅ 完成！共讀取 ${newToolData.length} 筆資料。`; 
+            e.target.value = ''; 
+        }; 
+        reader.readAsArrayBuffer(e.target.files[0]); 
+    });
+
+    // 2. 處理資料並畫出表格的函數
+    function processNewTable() {
+        if (newToolData.length === 0) {
+            alert("請先上傳資料！"); return;
+        }
+
+        let tableHTML = `<table id="newOutputTable"><thead><tr><th>測試欄位1</th><th>測試欄位2</th></tr></thead><tbody>`; 
+        
+        newToolData.slice(0, 10).forEach((item) => { 
+            let col1 = item["你的欄位A"] || "-";
+            let col2 = item["你的欄位B"] || "-";
+            tableHTML += `<tr><td contenteditable="true">${col1}</td><td contenteditable="true">${col2}</td></tr>`; 
+        }); 
+        tableHTML += `</tbody></table>`; 
+        
+        document.getElementById('newToolResultArea').innerHTML = tableHTML; 
+        document.getElementById('blockNewToolExport').style.display = 'block'; 
+    }
+
 </script>
 
 </body>

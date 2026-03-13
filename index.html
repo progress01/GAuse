@@ -103,7 +103,7 @@
         <button class="tablinks" onclick="openTab(event, 'LinkTool')">🔗 無效連結(全站)</button>
         <button class="tablinks" onclick="openTab(event, 'InspectTool')">✅ 網站檢核</button>
         <button class="tablinks" onclick="openTab(event, 'WCTool')">☁️ 文字雲</button>
-        <button class="tablinks" onclick="openTab(event, 'NewTableTool')">🌟 GA4流量使用</button>
+        <button class="tablinks" onclick="openTab(event, 'NewTableTool')">🌟 GA4 戰略診斷</button>
         
         <button class="btn-setting" onclick="document.getElementById('settingsModal').style.display='flex'">⚙️ 網站清單</button>
         <button class="btn-reset-all" onclick="resetEntireApp()" title="強制清空所有暫存">🧹 重置全部</button>
@@ -426,23 +426,27 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         </div>
     </div>
 
-<div id="NewTableTool" class="tabcontent">
+    <div id="NewTableTool" class="tabcontent">
         <div class="tool-container">
             
             <div style="margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px dashed #cbd5e1;">
-                <h2 style="margin-top:0;">🌟 GA4流量使用工具 (原功能)</h2>
+                <h2 style="margin-top:0; color: #10b981;">🌟 流量開發與時段健康度診斷 (Z-Score)</h2>
                 <div class="section">
-                    <div class="section-title">步驟一：上傳資料</div>
-                    <div class="format-hint">必備欄位：您的欄位A、您的欄位B</div><br>
-                    <input type="file" id="newToolUpload" accept=".csv, .xlsx" />
-                    <span id="newToolStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span>
+                    <div class="section-title">📥 上傳【流量開發】報表 (需包含小時維度)</div>
+                    <div class="format-hint">必備欄位：主要管道群組(或來源/媒介)、小時、工作階段、參與度</div>
+                    <p class="hint-text">建議在 GA4 報表中加入次要維度「小時」，能幫您找出最高品質的發文/推播時段。</p>
+                    <input type="file" id="trafficAcqUpload" accept=".csv, .xlsx" style="margin-top:10px;" />
+                    <span id="trafficAcqStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span>
                 </div>
 
-                <button class="action-btn btn-primary" onclick="processNewTable()">⚡ 產生報表</button>
+                <button class="action-btn btn-primary btn-full" onclick="processTrafficHealth()">⚡ 產生流量健康度診斷報表</button>
 
-                <div class="export-block" id="blockNewToolExport" style="display:none; margin-top:20px;">
-                    <h3 class="export-block-title">📊 產出結果</h3>
-                    <div id="newToolResultArea"></div>
+                <div class="export-block" id="blockTrafficHealthExport" style="display:none; margin-top:20px; border-color: #10b981;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 class="export-block-title" style="margin: 0; border: none; padding: 0;">📊 流量管道與時段體檢表</h3>
+                        <button class="action-btn btn-blue" onclick="execCopyWithFormControls(document.getElementById('trafficHealthTable'), '✅ 表格已複製！請至 Excel 貼上。')">📋 複製表格至 Excel</button>
+                    </div>
+                    <div id="trafficHealthResultArea" style="max-height: 500px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 4px;"></div>
                 </div>
             </div>
 
@@ -477,7 +481,8 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         </div>
     </div>
 
-</div> <script>
+</div> 
+<script>
     /* ---------------- 全域機制：解析與複製 ---------------- */
     function resetEntireApp() { 
         if (confirm("⚠️ 確定要清除工具箱內所有的資料與暫存嗎？")) {
@@ -596,7 +601,8 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
                str.includes("日期") || str.includes("date") || str.includes("day") || str.includes("日") ||
                str.includes("瀏覽") || str.includes("views") ||
                str.includes("標題") || str.includes("title") || 
-               str.includes("網站") || str.includes("無效連結")) {
+               str.includes("網站") || str.includes("無效連結") || 
+               str.includes("管道") || str.includes("channel")) {
                 hIdx = i; 
                 break;
             }
@@ -1657,44 +1663,107 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         link.click(); 
     }
 
-   /* =========================================
-       模組 H：GA4流量使用 (原功能 + 雙表診斷)
+    /* =========================================
+       模組 H：GA4 進階診斷工具 (流量時段 + 雙表走位)
        ========================================= */
        
-    // ================== 原本的功能 ==================
-    let newToolData = []; 
+    // ================== 新裝載：流量開發健康度診斷 ==================
+    let trafficAcqData = []; 
 
-    document.getElementById('newToolUpload').addEventListener('change', function(e) { 
+    document.getElementById('trafficAcqUpload').addEventListener('change', function(e) { 
         if (e.target.files.length === 0) return; 
-        document.getElementById('newToolStatus').innerText = "讀取中..."; 
+        document.getElementById('trafficAcqStatus').innerText = "讀取中..."; 
         let reader = new FileReader(); 
         
         reader.onload = function(evt) { 
             let json = parseRobustData(evt.target.result); 
-            newToolData = json; 
-            document.getElementById('newToolStatus').style.color = "#10b981"; 
-            document.getElementById('newToolStatus').innerText = `✅ 完成！共讀取 ${newToolData.length} 筆資料。`; 
+            trafficAcqData = json; 
+            document.getElementById('trafficAcqStatus').style.color = "#10b981"; 
+            document.getElementById('trafficAcqStatus').innerText = `✅ 完成！共讀取 ${trafficAcqData.length} 筆資料。`; 
             e.target.value = ''; 
         }; 
         reader.readAsArrayBuffer(e.target.files[0]); 
     });
 
-    function processNewTable() {
-        if (newToolData.length === 0) {
-            alert("請先上傳資料！"); return;
+    function processTrafficHealth() {
+        if (trafficAcqData.length === 0) {
+            alert("請先上傳流量開發資料！"); return;
         }
 
-        let tableHTML = `<table id="newOutputTable"><thead><tr><th>測試欄位1</th><th>測試欄位2</th></tr></thead><tbody>`; 
+        let processedData = [];
+
+        // 1. 解析與尋找欄位
+        trafficAcqData.forEach(row => {
+            let channelKey = Object.keys(row).find(k => k.includes("管道") || k.includes("Channel") || k.includes("來源"));
+            let hourKey = Object.keys(row).find(k => k.includes("小時") || k.includes("Hour"));
+            let sessionKey = Object.keys(row).find(k => k.includes("工作階段") || k.includes("Sessions"));
+            let engageKey = Object.keys(row).find(k => k.includes("參與度") || k.includes("Engagement rate"));
+
+            if (channelKey && sessionKey && engageKey) {
+                let sessions = parseSafeNumber(row[sessionKey]);
+                // 過濾極低流量雜訊，避免干擾標準差
+                if (sessions >= 10) {
+                    processedData.push({
+                        channel: String(row[channelKey]).trim(),
+                        hour: hourKey ? String(row[hourKey]).trim() : "-",
+                        sessions: sessions,
+                        engagementRate: parseSafeNumber(row[engageKey])
+                    });
+                }
+            }
+        });
+
+        if (processedData.length === 0) {
+            alert("⚠️ 找不到必要欄位，請確保包含：管道/來源、工作階段、參與度");
+            return;
+        }
+
+        // 2. 計算標準差 (Z-Score)
+        let sessionsArr = processedData.map(d => d.sessions);
+        let engageArr = processedData.map(d => d.engagementRate);
+        let sessionsZ = calculateZScores(sessionsArr); // 呼叫下方的共用函數
+        let engageZ = calculateZScores(engageArr);
+
+        // 3. 判定健康度四象限
+        processedData.forEach((d, idx) => {
+            d.zSession = sessionsZ[idx];
+            d.zEngage = engageZ[idx];
+
+            if (d.zSession > 0.5 && d.zEngage > 0.5) d.health = "🌟 黃金流量 (擴大投資)";
+            else if (d.zSession < -0.5 && d.zEngage > 0.5) d.health = "💎 潛力藍海 (增加曝光)";
+            else if (d.zSession > 0.5 && d.zEngage < -0.5) d.health = "🚨 虛胖流量 (檢查品質)";
+            else d.health = "✅ 表現平穩";
+        });
+
+        // 依流量大小排序
+        processedData.sort((a, b) => b.sessions - a.sessions);
+
+        // 4. 產生報表
+        let tableHTML = `<table id="trafficHealthTable" style="margin-top:0;">
+            <thead style="position: sticky; top: 0; z-index: 10;"><tr>
+                <th>流量管道/來源</th>
+                <th>時段 (小時)</th>
+                <th>工作階段<br>(流量大小)</th>
+                <th>參與度<br>(流量品質)</th>
+                <th>綜合健康度診斷</th>
+            </tr></thead><tbody>`; 
         
-        newToolData.slice(0, 10).forEach((item) => { 
-            let col1 = item["你的欄位A"] || "-";
-            let col2 = item["你的欄位B"] || "-";
-            tableHTML += `<tr><td contenteditable="true">${col1}</td><td contenteditable="true">${col2}</td></tr>`; 
+        processedData.forEach((d) => { 
+            let engagePct = d.engagementRate > 1 ? d.engagementRate.toFixed(2) : (d.engagementRate * 100).toFixed(2);
+            let healthColor = d.health.includes("黃金") ? '#10b981' : (d.health.includes("虛胖") ? '#ef4444' : '#333');
+
+            tableHTML += `<tr>
+                <td class="text-left" contenteditable="true"><b>${d.channel}</b></td>
+                <td contenteditable="true">${d.hour}</td>
+                <td contenteditable="true">${d.sessions.toLocaleString()}</td>
+                <td contenteditable="true">${engagePct}%</td>
+                <td class="text-left" contenteditable="true" style="color: ${healthColor}; font-weight: bold;">${d.health}</td>
+            </tr>`; 
         }); 
         tableHTML += `</tbody></table>`; 
         
-        document.getElementById('newToolResultArea').innerHTML = tableHTML; 
-        document.getElementById('blockNewToolExport').style.display = 'block'; 
+        document.getElementById('trafficHealthResultArea').innerHTML = tableHTML; 
+        document.getElementById('blockTrafficHealthExport').style.display = 'block'; 
     }
 
 

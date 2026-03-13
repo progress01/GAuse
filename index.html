@@ -171,7 +171,7 @@
 
                 <div class="section" style="margin-bottom:0;">
                     <div class="section-title">🌍 3. 上傳【來源管道】</div>
-                    <div class="format-hint">必含：來源(最初招攬...)、瀏覽、總人數</div>
+                    <div class="format-hint">必含：來源、瀏覽、總人數</div>
                     <input type="file" id="monthSourceUpload" accept=".csv, .xlsx" />
                     <span id="monthSourceStatus" class="status-text" style="color: #d32f2f;">尚未上傳</span>
                     
@@ -482,6 +482,7 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
     </div>
 
 </div> 
+
 <script>
     /* ---------------- 全域機制：解析與複製 ---------------- */
     function resetEntireApp() { 
@@ -620,10 +621,16 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
     ];
     let siteNames = [];
 
+    // 🌟 修復 1：增加 try-catch 防止損壞的 LocalStorage 讓整個網頁白屏死機
     function initGlobalSites() {
         let saved = localStorage.getItem('customSites');
         if (saved) { 
-            siteNames = JSON.parse(saved); 
+            try {
+                siteNames = JSON.parse(saved); 
+            } catch(e) {
+                siteNames = [...defaultSites];
+                localStorage.removeItem('customSites');
+            }
         } else { 
             siteNames = [...defaultSites]; 
         }
@@ -1685,21 +1692,22 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         reader.readAsArrayBuffer(e.target.files[0]); 
     });
 
+    // 🌟 修復 3：排版整理並修正隱藏邏輯錯誤
     function processTrafficHealth() {
         if (trafficAcqData.length === 0) {
             alert("請先上傳流量開發資料！"); return;
         }
 
         let processedData = [];
-        let botData = []; // 新增：用來存放被隔離的 Freego 或爬蟲
+        let botData = [];
 
-        // 1. 解析與尋找欄位
         trafficAcqData.forEach(row => {
             let channelKey = Object.keys(row).find(k => k.includes("管道") || k.includes("Channel") || k.includes("來源"));
             let hourKey = Object.keys(row).find(k => k.includes("小時") || k.includes("Hour"));
             let sessionKey = Object.keys(row).find(k => k.includes("工作階段") || k.includes("Sessions"));
-            let engageKey = Object.keys(row).find(k => k.includes("參與度") || k.includes("Engagement rate"));
-            // 抓出照妖鏡欄位：事件數
+            
+            // 🌟 修復 2：加上「參與率」與「互動率」，防止 GA4 改版導致全部資料被跳過！
+            let engageKey = Object.keys(row).find(k => k.includes("參與度") || k.includes("參與率") || k.includes("互動率") || k.includes("Engagement rate"));
             let epsKey = Object.keys(row).find(k => k.includes("每個工作階段的事件數") || k.includes("Events per session")); 
 
             if (channelKey && sessionKey && engageKey) {
@@ -1715,46 +1723,32 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
                     eps: eps
                 };
 
-                // 取得每個人的平均停留時間 (假設您的 CSV 裡有匯出這個欄位：平均單次工作階段參與時間)
-let avgTime = parseSafeNumber(row["平均單次工作階段參與時間"] || row["平均工作階段持續時間"] || 0);
+                let avgTime = parseSafeNumber(row["平均單次工作階段參與時間"] || row["平均工作階段持續時間"] || 0);
+                let isBot = false;
 
-// 判斷是否為機器人 (只要符合以下任一「非人類行為」，就隔離)
-let isBot = false;
+                if (engageRate === 0) isBot = true; 
+                if (eps > 15 && avgTime < 10) isBot = true;
+                if (eps > 50) isBot = true;
 
-// 1. 傳統笨爬蟲：完全沒互動秒離開 (虛胖到極致)
-if (engageRate === 0) isBot = true; 
-
-// 2. 超高速掃描器 (例如 Freego)：事件超級多，但待的時間不成比例的短
-// (例如：不到 10 秒鐘的時間內，竟然觸發了超過 15 個事件)
-if (eps > 15 && avgTime < 10) isBot = true;
-
-// 3. 終極暴力爬蟲：不管時間多長，單次造訪事件數破表 (例如 > 50)
-if (eps > 50) isBot = true;
-
-// 🛑 防毒分流機制：抓出掃描軟體與傳統爬蟲
-if (sessions > 10 && isBot) {
-    item.health = "🤖 異常掃描 (已排除計算)";
-    botData.push(item);
-} 
-// 正常人類流量 (排除極低流量雜訊，並確認非機器人)
-else if (sessions >= 10 && !isBot) {
-    processedData.push(item);
+                if (sessions > 10 && isBot) {
+                    item.health = "🤖 異常掃描 (已排除計算)";
+                    botData.push(item);
+                } else if (sessions >= 10 && !isBot) {
+                    processedData.push(item);
+                }
             }
-        }
         });
 
         if (processedData.length === 0) {
-            alert("⚠️ 扣除異常掃描流量後，找不到足夠的有效資料來分析。");
+            alert("⚠️ 扣除異常掃描流量後，找不到足夠的有效資料來分析。請確認您的 Excel 是否包含「參與度(率)」欄位。");
             return;
         }
 
-        // 2. 「只對正常人類流量」計算標準差 (Z-Score)
         let sessionsArr = processedData.map(d => d.sessions);
         let engageArr = processedData.map(d => d.engagementRate);
         let sessionsZ = calculateZScores(sessionsArr);
         let engageZ = calculateZScores(engageArr);
 
-        // 3. 判定健康度四象限 (只針對正常流量)
         processedData.forEach((d, idx) => {
             d.zSession = sessionsZ[idx];
             d.zEngage = engageZ[idx];
@@ -1765,13 +1759,9 @@ else if (sessions >= 10 && !isBot) {
             else d.health = "✅ 表現平穩";
         });
 
-        // 4. 將正常資料與被隔離的機器人資料合併，準備顯示
         let finalData = processedData.concat(botData);
-
-        // 依流量大小排序
         finalData.sort((a, b) => b.sessions - a.sessions);
 
-        // 5. 產生報表
         let tableHTML = `<table id="trafficHealthTable" style="margin-top:0;">
             <thead style="position: sticky; top: 0; z-index: 10;"><tr>
                 <th>流量管道/來源</th>
@@ -1786,13 +1776,11 @@ else if (sessions >= 10 && !isBot) {
             let engagePct = d.engagementRate > 1 ? d.engagementRate.toFixed(2) : (d.engagementRate * 100).toFixed(2);
             let epsText = d.eps > 0 ? d.eps.toFixed(1) : "-";
             
-            // 設定顏色：黃金(綠)、虛胖(紅)、機器人(灰)
             let healthColor = '#333';
             if (d.health.includes("黃金")) healthColor = '#10b981';
             else if (d.health.includes("虛胖")) healthColor = '#ef4444';
             else if (d.health.includes("機器人") || d.health.includes("掃描")) healthColor = '#94a3b8';
 
-            // 如果是機器人，整行背景變淺灰色以示區別
             let rowStyle = d.health.includes("掃描") ? 'background-color: #f8fafc; color: #94a3b8;' : '';
 
             tableHTML += `<tr style="${rowStyle}">
@@ -1810,22 +1798,19 @@ else if (sessions >= 10 && !isBot) {
         document.getElementById('blockTrafficHealthExport').style.display = 'block'; 
     }
 
-
     // ================== 新增的功能：網頁戰略走位診斷 ==================
     let ga4PagesData = [];
     let ga4LandingData = [];
 
-    // 計算 Z-Score 的數學輔助函數
     function calculateZScores(arr) {
         if (arr.length === 0) return [];
         let mean = arr.reduce((a, b) => a + b, 0) / arr.length;
         let variance = arr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / arr.length;
         let stdDev = Math.sqrt(variance);
-        if (stdDev === 0) return arr.map(() => 0); // 避免除以零
+        if (stdDev === 0) return arr.map(() => 0); 
         return arr.map(x => (x - mean) / stdDev);
     }
 
-    // 監聽【網頁參與】上傳
     document.getElementById('ga4PagesUpload').addEventListener('change', function(e) { 
         if (e.target.files.length === 0) return; 
         document.getElementById('ga4PagesStatus').innerText = "讀取中..."; 
@@ -1839,7 +1824,6 @@ else if (sessions >= 10 && !isBot) {
         reader.readAsArrayBuffer(e.target.files[0]); 
     });
 
-    // 監聽【到達網頁】上傳
     document.getElementById('ga4LandingUpload').addEventListener('change', function(e) { 
         if (e.target.files.length === 0) return; 
         document.getElementById('ga4LandingStatus').innerText = "讀取中..."; 
@@ -1853,14 +1837,12 @@ else if (sessions >= 10 && !isBot) {
         reader.readAsArrayBuffer(e.target.files[0]); 
     });
 
-    // 核心處理與合併邏輯
     function processGA4Strategy() {
         if (ga4PagesData.length === 0 || ga4LandingData.length === 0) {
             alert("⚠️ 請先上傳【網頁參與】與【到達網頁】兩份 Excel/CSV 檔案！");
             return;
         }
 
-        // 步驟 A：把「網頁參與」轉換成容易搜尋的 Map (查找表)
         let pagesMap = {};
         ga4PagesData.forEach(row => {
             let pathKey = Object.keys(row).find(k => k.includes("網頁路徑") || k.includes("Page path"));
@@ -1872,23 +1854,20 @@ else if (sessions >= 10 && !isBot) {
             }
         });
 
-        // 步驟 B：遍歷「到達網頁」，進行 Inner Join 合併
         let mergedData = [];
         ga4LandingData.forEach(row => {
             let landingKey = Object.keys(row).find(k => k.includes("到達網頁") || k.includes("Landing page"));
             let sessionKey = Object.keys(row).find(k => k.includes("工作階段") || k.includes("Sessions"));
             let avgTimeKey = Object.keys(row).find(k => k.includes("平均單次工作階段參與時間") || k.includes("Average session engagement time"));
-            let cvrKey = Object.keys(row).find(k => k.includes("發生率") || k.includes("轉換率") || k.includes("Session key event rate") || k.includes("重要事件發生率"));
+            // 🌟 修復擴增事件名稱
+            let cvrKey = Object.keys(row).find(k => k.includes("發生率") || k.includes("轉換率") || k.includes("Session key event rate") || k.includes("重要事件發生率") || k.includes("事件率"));
 
             if(landingKey && sessionKey && avgTimeKey && cvrKey) {
                 let path = String(row[landingKey]).trim();
-                // 排除無效網址
                 if (path !== "(not set)" && path !== "") {
                     let pageTime = pagesMap[path]; 
-                    // 如果在另一張表也有找到這個網址 (Inner Join 成功)
                     if (pageTime !== undefined) {
                         let sessions = parseSafeNumber(row[sessionKey]);
-                        // 防呆機制：過濾掉流量太低的雜訊 (例如工作階段小於 10 的長尾網頁)
                         if(sessions >= 10) {
                             mergedData.push({
                                 path: path,
@@ -1904,38 +1883,32 @@ else if (sessions >= 10 && !isBot) {
         });
 
         if(mergedData.length === 0) {
-            alert("⚠️ 錯誤：無法合併資料。請確保兩份報表的維度皆包含網址路徑，或欄位名稱正確。");
+            alert("⚠️ 錯誤：無法合併資料。請確保兩份報表的維度皆包含網址路徑，或檢查匯出的欄位名稱是否正確。");
             return;
         }
 
-        // 步驟 C：計算所有網頁的標準差 (Z-Score)
         let sessionsArr = mergedData.map(d => d.sessions);
         let cvrArr = mergedData.map(d => d.cvr);
         let sessionsZ = calculateZScores(sessionsArr);
         let cvrZ = calculateZScores(cvrArr);
 
-        // 步驟 D：計算時間差值與套用診斷邏輯
         mergedData.forEach((d, idx) => {
-            d.timeDiff = d.landingAvgTime - d.pageAvgTime; // 時間差值
+            d.timeDiff = d.landingAvgTime - d.pageAvgTime;
             d.zSession = sessionsZ[idx];
             d.zCvr = cvrZ[idx];
 
-            // 第一層：時間差走位判定
             if (d.timeDiff > 20) d.role = "【轉運站】(適合放導購連結)";
             else if (d.timeDiff < -20) d.role = "【委屈內容】(需檢查外部導流)";
             else d.role = "【穩健內容】(內外表現一致)";
 
-            // 第二層：Z-Score 健康度判定
             if (d.zSession > 0.5 && d.zCvr > 0.5) d.health = "🌟 明星網頁 (加碼推廣)";
             else if (d.zSession < -0.5 && d.zCvr > 0.5) d.health = "💎 潛力寶石 (增加曝光)";
             else if (d.zSession > 0.5 && d.zCvr < -0.5) d.health = "🚨 流量黑洞 (緊急優化)";
             else d.health = "✅ 表現平穩";
         });
 
-        // 依據外部流量大小排序
         mergedData.sort((a, b) => b.sessions - a.sessions);
 
-        // 步驟 E：產生 HTML 表格
         let tableHTML = `<table id="ga4StrategyTable" style="margin-top:0;">
             <thead style="position: sticky; top: 0; z-index: 10;"><tr>
                 <th>排名</th>

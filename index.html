@@ -787,35 +787,163 @@ Referral, AI : chatgpt, perplexity, gemini</textarea>
         reader.readAsArrayBuffer(e.target.files[0]);
     });
 
-    function generateTrendTable() {
-        if(Object.keys(trendCurDataMap).length === 0) { 
-            alert("請先上傳本月流量資料！"); 
-            return; 
+   // 將「報表月份」轉成 Date；支援 115年7月、115/7、115-7、2026年7月、2026/7、2026-7
+function parseReportMonthDate(text) {
+    if (!text) return null;
+    let str = String(text).trim();
+
+    let rocMatch = str.match(/^(\d{2,3})\s*[年\/\-]\s*(\d{1,2})\s*月?$/);
+    if (rocMatch) {
+        let rocYear = parseInt(rocMatch[1], 10);
+        let month = parseInt(rocMatch[2], 10);
+        if (month >= 1 && month <= 12) {
+            return new Date(rocYear + 1911, month - 1, 1);
         }
-        
-        let curSun = parseInt(document.getElementById('trendCurSun').value); 
-        let prevSun = parseInt(document.getElementById('trendPrevSun').value);
-        
-        let tableHTML = `<table id="trendOutputTable"><thead><tr><th style="width:60px;">日</th><th>本月流量</th><th>前月流量</th><th style="width:100px;">欄1(前月日期)</th></tr></thead><tbody>`;
-        
-        for(let i = 1; i <= 31; i++) {
-            let curViews = trendCurDataMap[i] !== undefined ? trendCurDataMap[i] : ""; 
-            let prevDay = i - curSun + prevSun; 
-            let prevViews = ""; 
-            let prevDayLabel = "";
-            
-            if(prevDay >= 1 && prevDay <= 31) { 
-                prevViews = trendPrevDataMap[prevDay] !== undefined ? trendPrevDataMap[prevDay] : ""; 
-                prevDayLabel = prevDay; 
-            }
-            
-            tableHTML += `<tr><td contenteditable="true">${i}</td><td contenteditable="true">${curViews}</td><td contenteditable="true">${prevViews}</td><td contenteditable="true">${prevDayLabel}</td></tr>`;
-        }
-        
-        tableHTML += `</tbody></table>`; 
-        document.getElementById('trendTableContainer').innerHTML = tableHTML; 
-        document.getElementById('trendTableArea').style.display = 'block';
     }
+
+    let adMatch = str.match(/^(20\d{2})\s*[年\/\-]\s*(\d{1,2})\s*月?$/);
+    if (adMatch) {
+        let year = parseInt(adMatch[1], 10);
+        let month = parseInt(adMatch[2], 10);
+        if (month >= 1 && month <= 12) {
+            return new Date(year, month - 1, 1);
+        }
+    }
+
+    return null;
+}
+
+function getFirstSundayDay(monthDate) {
+    if (!monthDate) return null;
+    let year = monthDate.getFullYear();
+    let month = monthDate.getMonth();
+
+    for (let day = 1; day <= 7; day++) {
+        let d = new Date(year, month, day);
+        if (d.getDay() === 0) return day;
+    }
+    return null;
+}
+
+function getDaysInMonth(monthDate) {
+    if (!monthDate) return 31;
+    return new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+}
+
+function formatROCMonth(monthDate) {
+    if (!monthDate) return "";
+    return `${monthDate.getFullYear() - 1911}年${monthDate.getMonth() + 1}月`;
+}
+
+function autoFillTrendSundayInputs(showHint = true) {
+    let hint = document.getElementById('trendAlignHint');
+    let reportMonthText = document.getElementById('monthlyDateText').value;
+    let curMonthDate = parseReportMonthDate(reportMonthText);
+
+    if (!curMonthDate) {
+        if (showHint && hint) {
+            hint.style.color = '#d32f2f';
+            hint.innerText = '⚠️ 無法由報表月份自動判斷，請使用格式例如：115年7月、115/7、2026年7月。';
+        }
+        return null;
+    }
+
+    let prevMonthDate = new Date(curMonthDate.getFullYear(), curMonthDate.getMonth() - 1, 1);
+    let curSun = getFirstSundayDay(curMonthDate);
+    let prevSun = getFirstSundayDay(prevMonthDate);
+
+    document.getElementById('trendCurSun').value = curSun;
+    document.getElementById('trendPrevSun').value = prevSun;
+
+    if (showHint && hint) {
+        hint.style.color = '#0284c7';
+        hint.innerText = `✅ 已依報表月份自動對齊：${formatROCMonth(curMonthDate)}第一個星期日為${curSun}日；${formatROCMonth(prevMonthDate)}第一個星期日為${prevSun}日。`;
+    }
+
+    return {
+        curMonthDate: curMonthDate,
+        prevMonthDate: prevMonthDate,
+        curSun: curSun,
+        prevSun: prevSun,
+        curDays: getDaysInMonth(curMonthDate),
+        prevDays: getDaysInMonth(prevMonthDate)
+    };
+}
+
+function generateTrendTable() {
+    if(Object.keys(trendCurDataMap).length === 0) { 
+        alert("請先上傳本月流量資料！"); 
+        return; 
+    }
+
+    if(Object.keys(trendPrevDataMap).length === 0) { 
+        alert("請先上傳前月流量資料！"); 
+        return; 
+    }
+
+    let alignInfo = autoFillTrendSundayInputs(true);
+    let curSun = parseInt(document.getElementById('trendCurSun').value, 10); 
+    let prevSun = parseInt(document.getElementById('trendPrevSun').value, 10);
+
+    if (isNaN(curSun) || isNaN(prevSun)) {
+        alert("無法判斷星期對齊起點，請確認報表月份格式，例如：115年7月；或手動填入本月與前月第一個星期日。");
+        return;
+    }
+
+    let curDataDays = Object.keys(trendCurDataMap).map(Number).filter(n => !isNaN(n));
+    let prevDataDays = Object.keys(trendPrevDataMap).map(Number).filter(n => !isNaN(n));
+    let maxCurDataDay = curDataDays.length > 0 ? Math.max(...curDataDays) : 31;
+    let maxPrevDataDay = prevDataDays.length > 0 ? Math.max(...prevDataDays) : 31;
+
+    // 以實際上傳資料為主，避免 30 天月份硬跑到 31 天。
+    let maxDay = maxCurDataDay;
+    let prevMonthDays = alignInfo ? alignInfo.prevDays : maxPrevDataDay;
+    let alignNote = alignInfo 
+        ? `${formatROCMonth(alignInfo.curMonthDate)} vs ${formatROCMonth(alignInfo.prevMonthDate)}，依第一個星期日對齊`
+        : `依手動輸入的星期起點對齊`;
+    
+    let tableHTML = `
+        <div class="hint-text" style="margin-bottom:8px; color:#475569;">${alignNote}。Excel 畫圖建議選取前三欄：日、本月流量、前月流量。</div>
+        <table id="trendOutputTable">
+            <thead>
+                <tr>
+                    <th style="width:60px;">日</th>
+                    <th>本月流量</th>
+                    <th>前月流量</th>
+                    <th style="width:110px;">前月對應日</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    for(let i = 1; i <= maxDay; i++) {
+        let curViews = trendCurDataMap[i] !== undefined ? trendCurDataMap[i] : ""; 
+        let prevDay = i - curSun + prevSun; 
+        let prevViews = ""; 
+        let prevDayLabel = "";
+        
+        if(prevDay >= 1 && prevDay <= prevMonthDays) { 
+            prevViews = trendPrevDataMap[prevDay] !== undefined ? trendPrevDataMap[prevDay] : ""; 
+            prevDayLabel = prevDay; 
+        }
+        
+        tableHTML += `
+            <tr>
+                <td contenteditable="true">${i}</td>
+                <td contenteditable="true">${curViews}</td>
+                <td contenteditable="true">${prevViews}</td>
+                <td contenteditable="true">${prevDayLabel}</td>
+            </tr>
+        `;
+    }
+    
+    tableHTML += `
+            </tbody>
+        </table>
+    `; 
+    document.getElementById('trendTableContainer').innerHTML = tableHTML; 
+    document.getElementById('trendTableArea').style.display = 'block';
+}
 
 
     /* =========================================
